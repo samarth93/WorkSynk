@@ -1,0 +1,23 @@
+nohup: ignoring input
+
+> frontend@0.1.0 dev
+> next dev --turbopack -p 3000
+
+   ▲ Next.js 15.4.6 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.4:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1151ms
+ ○ Compiling / ...
+ ✓ Compiled / in 3.8s
+ GET / 200 in 4325ms
+ GET / 200 in 100ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 718ms
+ GET /dashboard 200 in 776ms
+ ✓ Compiled /dashboard/rooms in 461ms
+ GET /dashboard/rooms 200 in 534ms
+ ✓ Compiled /dashboard/video in 434ms
+ GET /dashboard/video 200 in 495ms

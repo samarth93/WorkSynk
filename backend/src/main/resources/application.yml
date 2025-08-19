@@ -1,0 +1,49 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: workspace-app-backend
+  
+  data:
+    mongodb:
+      # MongoDB Atlas Cloud Database
+      uri: mongodb+srv://palsamarth9:sama.1234@cluster0.4yyhdbj.mongodb.net/workspace-app?retryWrites=true&w=majority&appName=Cluster0&connectTimeoutMS=30000&socketTimeoutMS=30000&serverSelectionTimeoutMS=30000&maxPoolSize=50&maxIdleTimeMS=120000&maxLifeTimeMS=300000
+      # Local fallback (commented out):
+      # uri: mongodb://localhost:27017/workspace-app
+  
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# JWT Configuration
+jwt:
+  secret: WorkspaceAppSecretKeyForJWTToken2023ExtraLongSecureKeyForHS512AlgorithmCompliance2024
+  expiration: 86400000 # 24 hours in milliseconds
+
+# CORS Configuration
+cors:
+  allowed-origins: http://localhost:3000
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+
+# Logging
+logging:
+  level:
+    com.workspace.app: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: INFO
+
+# WebSocket Configuration
+websocket:
+  allowed-origins: http://localhost:3000
+
+# VideoSDK Configuration
+videosdk:
+  apiKey: ${VIDEOSDK_API_KEY}
+  secret: ${VIDEOSDK_SECRET}
+  tokenTtlMinutes: 15

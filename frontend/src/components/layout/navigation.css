@@ -1,0 +1,139 @@
+/* Navigation-specific styles */
+
+/* Ensure proper flex behavior */
+.navigation-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 0;
+}
+
+/* Fixed header that doesn't shrink */
+.navigation-header {
+  flex-shrink: 0;
+  height: 4rem; /* 64px */
+}
+
+/* Scrollable navigation area */
+.navigation-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* User profile section always at bottom */
+.navigation-footer {
+  flex-shrink: 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .navigation-container {
+    width: 100%;
+    max-width: 85vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .navigation-container {
+    max-width: 320px;
+  }
+  
+  .navigation-header {
+    height: 3.5rem; /* 56px on mobile */
+  }
+}
+
+/* Smooth transitions for window resize */
+.navigation-container {
+  transition: width 0.3s ease-in-out;
+}
+
+/* Ensure text doesn't overflow on small screens */
+.navigation-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Custom scrollbar for navigation */
+.navigation-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.navigation-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.navigation-content::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+.navigation-content::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Ensure profile actions are properly sized */
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-action-item {
+  display: flex;
+  align-items: center;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  border: 1px solid #e5e7eb;
+  background: white;
+}
+
+.profile-action-item:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.profile-action-item:active {
+  background: #f3f4f6;
+  transform: scale(0.98);
+}
+
+/* Status indicator improvements */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.6875rem;
+  line-height: 1;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+/* Ensure user info doesn't break layout */
+.user-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-username {
+  font-size: 0.75rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
