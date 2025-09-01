@@ -61,23 +61,31 @@ public class AdminController {
             }
             String currentUserId = jwtUtils.getUserIdFromJwtToken(token);
             
+            // Get current user
+            Optional<User> userOpt = userService.getUserById(currentUserId);
+            if (userOpt.isEmpty()) {
+                return ResponseEntity.status(404).body(
+                    new ApiResponse<>(false, "User not found", null)
+                );
+            }
+            User currentUser = userOpt.get();
+            
+            // Verify user is global admin
+            if (!currentUser.isGlobalAdmin()) {
+                return ResponseEntity.status(403).body(
+                    new ApiResponse<>(false, "Only global admins can send invites", null)
+                );
+            }
+            
             // Get user's current workspace if not specified
             String workspaceId = request.getWorkspaceId();
             if (workspaceId == null || workspaceId.isEmpty()) {
-                Optional<User> userOpt = userService.getUserById(currentUserId);
-                if (userOpt.isEmpty() || userOpt.get().getCurrentWorkspaceId() == null) {
+                if (currentUser.getCurrentWorkspaceId() == null) {
                     return ResponseEntity.badRequest().body(
                         new ApiResponse<>(false, "No active workspace found", null)
                     );
                 }
-                workspaceId = userOpt.get().getCurrentWorkspaceId();
-            }
-            
-            // Verify user is admin of the workspace
-            if (!workspaceService.isWorkspaceAdmin(workspaceId, currentUserId)) {
-                return ResponseEntity.status(403).body(
-                    new ApiResponse<>(false, "Only workspace admins can send invites", null)
-                );
+                workspaceId = currentUser.getCurrentWorkspaceId();
             }
             
             // Create invite

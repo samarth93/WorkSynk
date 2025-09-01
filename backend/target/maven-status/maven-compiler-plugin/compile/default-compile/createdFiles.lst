@@ -15,6 +15,7 @@ com/workspace/app/controller/VideoController$StartPayload.class
 com/workspace/app/dto/LoginRequest.class
 com/workspace/app/service/WorkspaceInviteService.class
 com/workspace/app/model/WorkspaceInvite.class
+com/workspace/app/controller/GlobalExceptionHandler.class
 com/workspace/app/model/WorkspaceMember.class
 com/workspace/app/service/MessageService.class
 com/workspace/app/service/WorkspaceService.class

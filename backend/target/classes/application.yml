@@ -44,6 +44,6 @@ websocket:
 
 # VideoSDK Configuration
 videosdk:
-  apiKey: ${VIDEOSDK_API_KEY}
-  secret: ${VIDEOSDK_SECRET}
+  apiKey: 1616b563-d1e0-4b0b-8c7e-57080cb264c4
+  secret: eb5df45a66c37d3e049582c31c83d755282cf32224324af54557561551be906e
   tokenTtlMinutes: 15

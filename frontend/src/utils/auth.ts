@@ -20,6 +20,7 @@ export const saveAuthData = (authResponse: AuthResponse): void => {
     email: authResponse.email,
     firstName: authResponse.firstName,
     lastName: authResponse.lastName,
+    isGlobalAdmin: authResponse.isGlobalAdmin,
   }));
 };
 

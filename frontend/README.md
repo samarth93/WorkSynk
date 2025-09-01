@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WorkSynk Frontend
+
+This is the frontend application for WorkSynk, built with Next.js 15, React 19, and TypeScript.
+
+## Tech Stack
+
+- **Next.js 15** - React framework with App Router
+- **React 19** - Latest React with concurrent features
+- **TypeScript** - Type safety and developer experience
+- **Tailwind CSS** - Utility-first CSS framework
+- **Lucide React** - Beautiful icon library
 
 ## Getting Started
 
-First, run the development server:
-
+Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run the development server:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+```
+src/
+├── app/                 # Next.js App Router pages
+│   ├── auth/           # Authentication pages
+│   ├── dashboard/      # Main dashboard pages
+│   └── layout.tsx      # Root layout
+├── components/         # Reusable components
+│   ├── auth/          # Authentication components
+│   ├── chat/          # Chat components
+│   ├── layout/        # Layout components
+│   └── ui/            # UI components
+├── contexts/          # React contexts
+├── hooks/             # Custom React hooks
+├── lib/              # API and utilities
+├── types/            # TypeScript definitions
+└── utils/            # Utility functions
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Key Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Modern UI**: Responsive design with dark/light themes
+- **Real-time**: WebSocket integration for live updates
+- **Authentication**: JWT-based auth with protected routes
+- **Video Calls**: Integrated video calling functionality
+- **Chat System**: Real-time messaging
+- **Role Management**: User and admin interfaces
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Build
 
-## Deploy on Vercel
+```bash
+npm run build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Lint
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run lint
+```

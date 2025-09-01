@@ -115,8 +115,8 @@ export default function DashboardPage() {
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
-            <h2 className="text-2xl font-semibold text-gray-900 mt-4">Loading...</h2>
-            <p className="text-gray-600 mt-2">Checking authentication</p>
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mt-4">Loading...</h2>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">Checking authentication</p>
           </div>
         </div>
       </DashboardLayout>
@@ -127,15 +127,15 @@ export default function DashboardPage() {
     return (
       <DashboardLayout>
         <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-32 bg-gray-200 rounded-lg"></div>
+              <div key={i} className="h-32 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
             ))}
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="h-64 bg-gray-200 rounded-lg"></div>
-            <div className="h-64 bg-gray-200 rounded-lg"></div>
+            <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+            <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
           </div>
         </div>
       </DashboardLayout>
@@ -172,71 +172,79 @@ export default function DashboardPage() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">My Rooms</p>
-                <p className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.totalRooms}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">My Rooms</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{stats.totalRooms}</p>
               </div>
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
+                <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600 dark:text-blue-400" />
               </div>
             </div>
-            <div className="mt-3 sm:mt-4 flex items-center text-sm text-gray-500">
+            <div className="mt-3 sm:mt-4 flex items-center text-sm">
               <TrendingUp className="h-4 w-4 mr-1" />
-              <span className="hidden sm:inline">Active workspaces</span>
-              <span className="sm:hidden">Active</span>
+              <span className="text-gray-500 dark:text-gray-400 text-sm">
+                <span className="hidden sm:inline">Active workspaces</span>
+                <span className="sm:hidden">Active</span>
+              </span>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Admin Rooms</p>
-                <p className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.adminRooms}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Admin Rooms</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{stats.adminRooms}</p>
               </div>
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <Users className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
+                <Users className="h-5 w-5 sm:h-6 sm:w-6 text-green-600 dark:text-green-400" />
               </div>
             </div>
-            <div className="mt-3 sm:mt-4 flex items-center text-sm text-gray-500">
+            <div className="mt-3 sm:mt-4 flex items-center text-sm">
               <Activity className="h-4 w-4 mr-1" />
-              <span className="hidden sm:inline">Rooms you manage</span>
-              <span className="sm:hidden">Managed</span>
+              <span className="text-gray-500 dark:text-gray-400 text-sm">
+                <span className="hidden sm:inline">Rooms you manage</span>
+                <span className="sm:hidden">Managed</span>
+              </span>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Messages</p>
-                <p className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.totalMessages}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Messages</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{stats.totalMessages}</p>
               </div>
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
+                <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600 dark:text-purple-400" />
               </div>
             </div>
-            <div className="mt-3 sm:mt-4 flex items-center text-sm text-gray-500">
+            <div className="mt-3 sm:mt-4 flex items-center text-sm">
               <Clock className="h-4 w-4 mr-1" />
-              <span className="hidden sm:inline">Total conversations</span>
-              <span className="sm:hidden">Conversations</span>
+              <span className="text-gray-500 dark:text-gray-400 text-sm">
+                <span className="hidden sm:inline">Total conversations</span>
+                <span className="sm:hidden">Conversations</span>
+              </span>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Video Calls</p>
-                <p className="text-2xl sm:text-3xl font-bold text-green-600">Active</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Video Calls</p>
+                <p className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">Active</p>
               </div>
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <Video className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
+                <Video className="h-5 w-5 sm:h-6 sm:w-6 text-green-600 dark:text-green-400" />
               </div>
             </div>
-            <div className="mt-3 sm:mt-4 flex items-center text-sm text-green-600">
+            <div className="mt-3 sm:mt-4 flex items-center text-sm text-green-600 dark:text-green-400">
               <Video className="h-4 w-4 mr-1" />
-              <span className="hidden sm:inline">Video calls available</span>
-              <span className="sm:hidden">Available</span>
+              <span className="text-sm text-green-600 dark:text-green-400">
+                <span className="hidden sm:inline">Video calls available</span>
+                <span className="sm:hidden">Available</span>
+              </span>
             </div>
           </div>
         </div>
@@ -244,13 +252,13 @@ export default function DashboardPage() {
         {/* Recent Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Recent Rooms */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-            <div className="p-4 sm:p-6 border-b border-gray-200">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-900">Recent Rooms</h2>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Rooms</h2>
                 <Link 
                   href="/dashboard/rooms"
-                  className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium flex items-center"
                 >
                   <span className="hidden sm:inline">View all</span>
                   <span className="sm:hidden">All</span>
@@ -265,29 +273,29 @@ export default function DashboardPage() {
                     <Link
                       key={room.id}
                       href={`/dashboard/rooms/${room.id}`}
-                      className="block p-3 sm:p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors group"
+                      className="block p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors group"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-medium text-gray-900 truncate">{room.name}</h3>
+                          <h3 className="font-medium text-gray-900 dark:text-white truncate">{room.name}</h3>
                           <div className="mt-1 flex items-center gap-2 flex-wrap">
-                            <span className="inline-flex items-center text-xs text-gray-600 bg-gray-100 px-2 py-0.5 rounded">
+                            <span className="inline-flex items-center text-xs text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">
                               {room.members.length} members
                             </span>
-                            <span className={`inline-flex items-center text-xs ${room.private ? 'text-orange-700 bg-orange-100' : 'text-green-700 bg-green-100'} px-2 py-0.5 rounded`}>
+                            <span className={`inline-flex items-center text-xs px-2 py-0.5 rounded ${room.private ? 'text-orange-700 dark:text-orange-300 bg-orange-100 dark:bg-orange-900/20' : 'text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900/20'}`}>
                               {room.private ? 'Private' : 'Public'}
                             </span>
                           </div>
                         </div>
                         <div className="text-right ml-3">
-                          <div className="text-xs text-gray-400">
+                          <span className="text-gray-500 dark:text-gray-400 text-xs">
                             {room.lastMessageAt 
                               ? new Date(room.lastMessageAt).toLocaleDateString()
                               : 'No messages'
                             }
-                          </div>
+                          </span>
                           {room.adminId === user?.id && (
-                            <div className="text-xs text-blue-600 font-medium group-hover:underline">Admin</div>
+                            <div className="text-xs text-blue-600 dark:text-blue-400 font-medium group-hover:underline">Admin</div>
                           )}
                         </div>
                       </div>
@@ -296,14 +304,13 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <MessageSquare className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500 mb-4">No rooms yet</p>
-                  <Link
-                    href="/dashboard/create-room"
-                    className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create your first room
+                  <MessageSquare className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">No rooms yet</p>
+                  <Link href="/dashboard/create-room">
+                    <button className="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create your first room
+                    </button>
                   </Link>
                 </div>
               )}
@@ -311,45 +318,45 @@ export default function DashboardPage() {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-            <div className="p-4 sm:p-6 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Quick Actions</h2>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Quick Actions</h2>
             </div>
             <div className="p-4 sm:p-6">
               <div className="space-y-3 sm:space-y-4">
                 <Link
                   href="/dashboard/create-room"
-                  className="flex items-center p-3 sm:p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
+                  className="flex items-center p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
                 >
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
-                    <Plus className="h-5 w-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
+                    <Plus className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-gray-900">Create Room</h3>
-                    <p className="text-sm text-gray-500">Start a new workspace</p>
+                    <h3 className="font-medium text-gray-900 dark:text-white">Create Room</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Start a new workspace</p>
                   </div>
                 </Link>
 
                 <Link
                   href="/dashboard/browse"
-                  className="flex items-center p-3 sm:p-4 rounded-lg border border-gray-200 hover:border-green-300 hover:bg-green-50 transition-colors"
+                  className="flex items-center p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-green-300 dark:hover:border-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
                 >
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
-                    <Users className="h-5 w-5 text-green-600" />
+                  <div className="w-10 h-10 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
+                    <Users className="h-5 w-5 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-gray-900">Browse Rooms</h3>
-                    <p className="text-sm text-gray-500">Join existing workspaces</p>
+                    <h3 className="font-medium text-gray-900 dark:text-white">Browse Rooms</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Join existing workspaces</p>
                   </div>
                 </Link>
 
-                <div className="flex items-center p-3 sm:p-4 rounded-lg border border-gray-200 bg-gray-50">
-                  <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
-                    <Video className="h-5 w-5 text-orange-600" />
+                <div className="flex items-center p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                  <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/20 rounded-lg flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
+                    <Video className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-green-600">Video Calls</h3>
-                    <p className="text-sm text-green-600">Available in rooms</p>
+                    <h3 className="font-medium text-green-600 dark:text-green-400">Video Calls</h3>
+                    <p className="text-sm text-green-600 dark:text-green-400">Available in rooms</p>
                   </div>
                 </div>
               </div>

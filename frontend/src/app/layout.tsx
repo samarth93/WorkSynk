@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import NetworkStatus from "@/components/NetworkStatus";
 import ClientOnly from "@/components/ClientOnly";
@@ -31,14 +32,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen`}>
+      <body className={`${inter.variable} antialiased min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800`}>
         <ErrorBoundary>
-          <AuthProvider>
-            <ClientOnly>
-              <NetworkStatus />
-            </ClientOnly>
-            {children}
-          </AuthProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <ClientOnly>
+                <NetworkStatus />
+              </ClientOnly>
+              {children}
+            </AuthProvider>
+          </ThemeProvider>
         </ErrorBoundary>
       </body>
     </html>

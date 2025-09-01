@@ -12,6 +12,7 @@ public class AuthResponse {
     private String email;
     private String firstName;
     private String lastName;
+    private boolean isGlobalAdmin;
     
     // Constructors
     public AuthResponse() {}
@@ -78,5 +79,13 @@ public class AuthResponse {
     
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+    
+    public boolean isGlobalAdmin() {
+        return isGlobalAdmin;
+    }
+    
+    public void setGlobalAdmin(boolean globalAdmin) {
+        isGlobalAdmin = globalAdmin;
     }
 }

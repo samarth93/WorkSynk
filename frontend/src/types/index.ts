@@ -12,6 +12,7 @@ export interface User {
   status?: string;
   joinedRooms: string[];
   adminRooms: string[];
+  isGlobalAdmin: boolean;
   createdAt: string;
   lastLoginAt?: string;
   isActive: boolean;
@@ -41,6 +42,7 @@ export interface AuthResponse {
   email: string;
   firstName?: string;
   lastName?: string;
+  isGlobalAdmin: boolean;
 }
 
 // Room types
@@ -195,4 +197,169 @@ export interface VideoCallSettings {
   defaultVideoEnabled: boolean;
   preferredResolution: string;
   backgroundBlur: boolean;
+}
+
+// Enhanced type definitions for better structure
+
+// Chat and messaging types
+export interface ChatMessage {
+  id: string;
+  roomId: string;
+  senderId: string;
+  senderName: string;
+  senderAvatar?: string;
+  content: string;
+  timestamp: Date;
+  edited?: boolean;
+  editedAt?: Date;
+  replyTo?: string;
+  reactions?: MessageReaction[];
+}
+
+export interface MessageReaction {
+  emoji: string;
+  users: string[];
+  count: number;
+}
+
+// Video call types
+export interface VideoCall {
+  id: string;
+  roomId: string;
+  videoRoomId?: string;
+  startedBy: string;
+  startedAt: Date;
+  endedAt?: Date;
+  participants: VideoParticipant[];
+  recordingEnabled: boolean;
+  status: 'active' | 'ended' | 'paused';
+}
+
+export interface VideoParticipant {
+  id: string;
+  userId: string;
+  name: string;
+  avatar?: string;
+  joinedAt: Date;
+  leftAt?: Date;
+  isAudioOn: boolean;
+  isVideoOn: boolean;
+  isScreenSharing: boolean;
+  isHandRaised: boolean;
+  isModerator: boolean;
+  connectionQuality: 'good' | 'fair' | 'poor';
+}
+
+// Enhanced user and workspace types
+export interface UserSettings {
+  theme: 'light' | 'dark' | 'system';
+  notifications: {
+    desktop: boolean;
+    sound: boolean;
+    email: boolean;
+    mentions: boolean;
+    directMessages: boolean;
+  };
+  privacy: {
+    showOnlineStatus: boolean;
+    allowDirectMessages: boolean;
+    shareProfile: boolean;
+  };
+  preferences: {
+    language: string;
+    timezone: string;
+    dateFormat: string;
+    compactMode: boolean;
+  };
+}
+
+export interface UserProfile extends User {
+  settings: UserSettings;
+  lastSeen: Date;
+  joinedWorkspaces: string[];
+  createdRooms: string[];
+}
+
+// Notification system
+export interface Notification {
+  id: string;
+  type: 'mention' | 'direct_message' | 'room_invite' | 'call_started' | 'system';
+  title: string;
+  message: string;
+  timestamp: Date;
+  read: boolean;
+  actionUrl?: string;
+  data?: Record<string, any>;
+}
+
+// API response wrapper
+export interface ApiResponse<T = any> {
+  success: boolean;
+  message: string;
+  data?: T;
+  error?: string;
+  timestamp: string;
+}
+
+// WebSocket event types
+export interface WebSocketEvent {
+  type: 'message' | 'user_joined' | 'user_left' | 'typing' | 'call_started' | 'call_ended';
+  roomId?: string;
+  userId?: string;
+  data: any;
+  timestamp: Date;
+}
+
+// Form validation types
+export interface FormValidation {
+  isValid: boolean;
+  errors: Record<string, string>;
+  touched: Record<string, boolean>;
+}
+
+// Theme and UI types
+export interface ThemeContextValue {
+  theme: 'light' | 'dark' | 'system';
+  setTheme: (theme: 'light' | 'dark' | 'system') => void;
+  resolvedTheme: 'light' | 'dark';
+  systemTheme: 'light' | 'dark';
+}
+
+// Component prop types
+export interface BaseComponentProps {
+  className?: string;
+  children?: React.ReactNode;
+}
+
+export interface ButtonProps extends BaseComponentProps {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
+  size?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
+  loading?: boolean;
+  onClick?: () => void;
+}
+
+// Utility types
+export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
+
+export interface PaginationMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  meta: PaginationMeta;
+}
+
+// Error types
+export interface AppError {
+  code: string;
+  message: string;
+  details?: Record<string, any>;
+  timestamp: Date;
 }

@@ -52,6 +52,9 @@ public class User {
     // List of room IDs the user is an admin of
     private List<String> adminRooms = new ArrayList<>();
     
+    // Global admin flag - true for workspace owners, false for invited users
+    private boolean isGlobalAdmin = false;
+    
     // Workspace membership
     private String currentWorkspaceId; // Current active workspace
     private List<String> workspaceIds = new ArrayList<>(); // All workspaces user belongs to
@@ -147,6 +150,14 @@ public class User {
     
     public void setAdminRooms(List<String> adminRooms) {
         this.adminRooms = adminRooms;
+    }
+    
+    public boolean isGlobalAdmin() {
+        return isGlobalAdmin;
+    }
+    
+    public void setGlobalAdmin(boolean globalAdmin) {
+        isGlobalAdmin = globalAdmin;
     }
     
     public LocalDateTime getCreatedAt() {

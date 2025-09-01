@@ -64,6 +64,8 @@ apiClient.interceptors.response.use(
         errorMessage = 'Resource not found';
       } else if (status === 403) {
         errorMessage = 'Access denied';
+      } else if (status === 401) {
+        errorMessage = 'Authentication required. Please log in.';
       } else if (status === 500) {
         errorMessage = 'Server error';
       } else {
@@ -73,18 +75,19 @@ apiClient.interceptors.response.use(
       // Request was made but no response received
       errorMessage = 'No response from server';
       errorDetails = {
-        request: error.request,
-        url: error.config?.url,
-        method: error.config?.method
+        request: error.request ? 'Request object exists' : 'No request object',
+        url: error.config?.url || 'No URL',
+        method: error.config?.method || 'No method',
+        message: error.message || 'No error message'
       };
     } else {
       // Something else happened
       errorMessage = error.message || 'Unknown error';
       errorDetails = {
-        message: error.message,
-        name: error.name,
-        url: error.config?.url,
-        method: error.config?.method
+        message: error.message || 'No error message',
+        name: error.name || 'No error name',
+        url: error.config?.url || 'No URL',
+        method: error.config?.method || 'No method'
       };
     }
     
@@ -96,7 +99,8 @@ apiClient.interceptors.response.use(
       // Clear token on unauthorized
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/auth/login';
+      // Don't redirect immediately, let the component handle it
+      errorMessage = 'Authentication required. Please log in.';
     }
     
     // Create a new error with the detailed message

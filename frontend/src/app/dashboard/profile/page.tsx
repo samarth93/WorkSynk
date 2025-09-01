@@ -12,7 +12,16 @@ import {
   Save,
   Loader2,
   Check,
-  AlertCircle
+  AlertCircle,
+  Edit3,
+  Shield,
+  Clock,
+  MapPin,
+  Phone,
+  Globe,
+  Linkedin,
+  Github,
+  Twitter
 } from 'lucide-react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { useAuth } from '@/contexts/AuthContext';
@@ -45,14 +54,68 @@ export default function ProfilePage() {
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
   const [errors, setErrors] = useState<Partial<UserFormData>>({});
 
-  // Status options with labels and colors
+  // Status options with labels, colors, and icons
   const statusOptions = [
-    { value: 'online', label: 'Online', color: 'bg-green-500', description: 'Available and active' },
-    { value: 'busy', label: 'Busy', color: 'bg-red-500', description: 'Do not disturb' },
-    { value: 'away', label: 'Away', color: 'bg-yellow-500', description: 'Temporarily unavailable' },
-    { value: 'offline', label: 'Offline', color: 'bg-gray-500', description: 'Not available' },
-    { value: 'vacation', label: 'On Vacation', color: 'bg-blue-500', description: 'Taking time off' },
-    { value: 'medical_leave', label: 'Medical Leave', color: 'bg-purple-500', description: 'On medical leave' },
+    { 
+      value: 'online', 
+      label: 'Online', 
+      color: 'bg-emerald-500', 
+      bgColor: 'bg-emerald-50',
+      borderColor: 'border-emerald-200',
+      textColor: 'text-emerald-700',
+      description: 'Available and active',
+      icon: Circle
+    },
+    { 
+      value: 'busy', 
+      label: 'Busy', 
+      color: 'bg-red-500', 
+      bgColor: 'bg-red-50',
+      borderColor: 'border-red-200',
+      textColor: 'text-red-700',
+      description: 'Do not disturb',
+      icon: Circle
+    },
+    { 
+      value: 'away', 
+      label: 'Away', 
+      color: 'bg-amber-500', 
+      bgColor: 'bg-amber-50',
+      borderColor: 'border-amber-200',
+      textColor: 'text-amber-700',
+      description: 'Temporarily unavailable',
+      icon: Circle
+    },
+    { 
+      value: 'offline', 
+      label: 'Offline', 
+      color: 'bg-gray-500', 
+      bgColor: 'bg-gray-50',
+      borderColor: 'border-gray-200',
+      textColor: 'text-gray-700',
+      description: 'Not available',
+      icon: Circle
+    },
+    { 
+      value: 'vacation', 
+      label: 'On Vacation', 
+      color: 'bg-blue-500', 
+      bgColor: 'bg-blue-50',
+      borderColor: 'border-blue-200',
+      textColor: 'text-blue-700',
+      description: 'Taking time off',
+      icon: Circle
+    },
+    { 
+      value: 'medical_leave', 
+      label: 'Medical Leave', 
+      color: 'bg-purple-500', 
+      bgColor: 'bg-purple-50',
+      borderColor: 'border-purple-200',
+      textColor: 'text-purple-700',
+      description: 'On medical leave',
+      icon: Circle
+    },
   ] as const;
 
   useEffect(() => {
@@ -163,296 +226,357 @@ export default function ProfilePage() {
 
   return (
     <DashboardLayout>
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Profile</h1>
-          <p className="text-gray-600 text-sm sm:text-base">Manage your personal information and status</p>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between profile-header">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Profile Settings</h1>
+              <p className="mt-2 text-gray-600 dark:text-gray-300">Manage your personal information and preferences</p>
+            </div>
+            {!isEditing && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 transition-all duration-200 shadow-lg hover:shadow-xl gradient-button profile-actions"
+              >
+                <Edit3 className="h-4 w-4 mr-2" />
+                Edit Profile
+              </button>
+            )}
+          </div>
         </div>
 
+        {/* Success/Error Message */}
         {message && (
-          <div className={`mb-6 px-4 py-3 rounded-lg border ${
+          <div className={`mb-6 p-4 rounded-xl border-l-4 ${
             message.type === 'success' 
-              ? 'bg-green-50 border-green-200 text-green-700' 
-              : 'bg-red-50 border-red-200 text-red-700'
+              ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-400 text-emerald-800 dark:text-emerald-300 success-message' 
+              : 'bg-red-50 dark:bg-red-900/20 border-red-400 text-red-800 dark:text-red-300 error-message'
           }`}>
             <div className="flex items-center">
               {message.type === 'success' ? (
-                <Check className="h-5 w-5 mr-2" />
+                <Check className="h-5 w-5 mr-3 text-emerald-500" />
               ) : (
-                <AlertCircle className="h-5 w-5 mr-2" />
+                <AlertCircle className="h-5 w-5 mr-3 text-red-500" />
               )}
-              <span className="text-sm sm:text-base">{message.text}</span>
+              <span className="font-medium">{message.text}</span>
             </div>
           </div>
         )}
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-          {/* Profile Header */}
-          <div className="p-4 sm:p-6 border-b border-gray-200">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                {/* Profile Picture */}
-                <div className="relative">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white text-xl sm:text-2xl font-bold">
-                    {user.profilePictureUrl ? (
-                      <img
-                        src={user.profilePictureUrl}
-                        alt={formatUserDisplayName(user)}
-                        className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover"
-                      />
-                    ) : (
-                      getUserInitials(user)
-                    )}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 profile-grid">
+          {/* Left Column - Profile Card */}
+          <div className="lg:col-span-1">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden profile-card">
+              {/* Profile Header */}
+              <div className="relative bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-6 text-white">
+                <div className="flex items-center space-x-4">
+                  <div className="relative profile-picture-container">
+                    <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-white text-2xl font-bold backdrop-blur-sm border-2 border-white/30">
+                      {user.profilePictureUrl ? (
+                        <img
+                          src={user.profilePictureUrl}
+                          alt={formatUserDisplayName(user)}
+                          className="w-20 h-20 rounded-full object-cover"
+                        />
+                      ) : (
+                        getUserInitials(user)
+                      )}
+                    </div>
+                    <button className="absolute -bottom-1 -right-1 w-7 h-7 bg-white rounded-full flex items-center justify-center text-blue-600 hover:bg-gray-50 transition-colors shadow-lg camera-button">
+                      <Camera className="h-4 w-4" />
+                    </button>
                   </div>
-                  <button className="absolute bottom-0 right-0 w-5 h-5 sm:w-6 sm:h-6 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
-                    <Camera className="h-3 w-3" />
-                  </button>
-                </div>
-
-                {/* User Info */}
-                <div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-                    {formatUserDisplayName(user)}
-                  </h2>
-                  <div className="flex items-center mt-1">
-                    <Mail className="h-4 w-4 text-gray-400 mr-2" />
-                    <span className="text-gray-600 text-sm sm:text-base">{user.email}</span>
-                  </div>
-                  <div className="flex items-center mt-1">
-                    <Calendar className="h-4 w-4 text-gray-400 mr-2" />
-                    <span className="text-gray-600 text-sm sm:text-base">
-                      Joined {new Date(user.createdAt).toLocaleDateString()}
-                    </span>
+                  <div className="flex-1">
+                    <h2 className="text-xl font-bold">{formatUserDisplayName(user)}</h2>
+                    <p className="text-blue-100 text-sm">{formData.designation || 'No designation set'}</p>
                   </div>
                 </div>
               </div>
 
-              {/* Edit Button */}
-              {!isEditing && (
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm font-medium"
-                >
-                  Edit Profile
-                </button>
-              )}
-            </div>
-          </div>
+              {/* Profile Info */}
+              <div className="p-6 space-y-4">
+                <div className="flex items-center space-x-3 text-gray-600 dark:text-gray-300">
+                  <Mail className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                  <span className="text-sm">{user.email}</span>
+                </div>
+                <div className="flex items-center space-x-3 text-gray-600 dark:text-gray-300">
+                  <Calendar className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                  <span className="text-sm">Joined {new Date(user.createdAt).toLocaleDateString()}</span>
+                </div>
+                <div className="flex items-center space-x-3 text-gray-600 dark:text-gray-300">
+                  <Shield className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                  <span className="text-sm capitalize">{user.role || 'User'}</span>
+                </div>
+              </div>
 
-          {/* Status Section */}
-          <div className="p-4 sm:p-6 border-b border-gray-200">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Current Status</h3>
-              {!isEditing && (
-                <div className="flex items-center space-x-2">
-                  <Circle className={`h-3 w-3 ${getCurrentStatus().color}`} />
-                  <span className="text-sm font-medium text-gray-900">
-                    {getCurrentStatus().label}
+              {/* Status Section */}
+              <div className="px-6 pb-6">
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Current Status</h3>
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-3 h-3 rounded-full ${getCurrentStatus().color} animate-pulse`}></div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">{getCurrentStatus().label}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{getCurrentStatus().description}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 stats-card">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Stats</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Workspace</span>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">Active</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Member Since</span>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                    {new Date(user.createdAt).toLocaleDateString()}
                   </span>
                 </div>
-              )}
-            </div>
-            
-            {isEditing ? (
-              <div>
-                <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
-                  Status
-                </label>
-                <select
-                  id="status"
-                  name="status"
-                  value={formData.status}
-                  onChange={handleInputChange}
-                  className="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white text-sm sm:text-base"
-                >
-                  {statusOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label} - {option.description}
-                    </option>
-                  ))}
-                </select>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Last Active</span>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">Today</span>
+                </div>
               </div>
-            ) : (
-              <p className="text-gray-600 text-sm sm:text-base">{getCurrentStatus().description}</p>
-            )}
+            </div>
           </div>
 
-          {/* Profile Information Form */}
-          <div className="p-4 sm:p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">Profile Information</h3>
-            
-            <div className="space-y-6">
-              {/* Name Fields */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
-                    First Name
-                  </label>
-                  <div className="relative">
-                    <UserIcon className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <input
-                      id="firstName"
-                      name="firstName"
-                      type="text"
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900 bg-white placeholder-gray-500 text-sm sm:text-base ${
-                        isEditing 
-                          ? (errors.firstName ? 'border-red-300' : 'border-gray-300')
-                          : 'border-gray-200 bg-gray-50'
-                      }`}
-                      placeholder="Enter your first name"
-                    />
-                  </div>
-                  {errors.firstName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
-                    Last Name
-                  </label>
-                  <div className="relative">
-                    <UserIcon className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <input
-                      id="lastName"
-                      name="lastName"
-                      type="text"
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900 bg-white placeholder-gray-500 text-sm sm:text-base ${
-                        isEditing 
-                          ? (errors.lastName ? 'border-red-300' : 'border-gray-300')
-                          : 'border-gray-200 bg-gray-50'
-                      }`}
-                      placeholder="Enter your last name"
-                    />
-                  </div>
-                  {errors.lastName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
-                  )}
-                </div>
+          {/* Right Column - Form */}
+          <div className="lg:col-span-2">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden profile-card">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Profile Information</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Update your personal and professional details</p>
               </div>
 
-              {/* Professional Fields */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                <div>
-                  <label htmlFor="designation" className="block text-sm font-medium text-gray-700 mb-2">
-                    Designation
-                  </label>
-                  <div className="relative">
-                    <Briefcase className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <input
-                      id="designation"
-                      name="designation"
-                      type="text"
-                      value={formData.designation}
+              <div className="p-6 space-y-6">
+                {/* Status Selection */}
+                {isEditing && (
+                  <div className="bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-800 dark:to-blue-900/20 rounded-xl p-4 border border-blue-100 dark:border-blue-800">
+                    <label htmlFor="status" className="block text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                      Update Status
+                    </label>
+                    <select
+                      id="status"
+                      name="status"
+                      value={formData.status}
                       onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900 bg-white placeholder-gray-500 text-sm sm:text-base ${
-                        isEditing 
-                          ? (errors.designation ? 'border-red-300' : 'border-gray-300')
-                          : 'border-gray-200 bg-gray-50'
-                      }`}
-                      placeholder="e.g. Senior Developer"
-                    />
+                      className="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white bg-white dark:bg-gray-700 text-sm transition-all duration-200"
+                    >
+                      {statusOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label} - {option.description}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                  {errors.designation && (
-                    <p className="mt-1 text-sm text-red-600">{errors.designation}</p>
-                  )}
-                </div>
+                )}
 
-                <div>
-                  <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
-                    Role
-                  </label>
-                  <div className="relative">
-                    <UserIcon className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <input
-                      id="role"
-                      name="role"
-                      type="text"
-                      value={formData.role}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900 bg-white placeholder-gray-500 text-sm sm:text-base ${
-                        isEditing 
-                          ? (errors.role ? 'border-red-300' : 'border-gray-300')
-                          : 'border-gray-200 bg-gray-50'
-                      }`}
-                      placeholder="e.g. Frontend Lead"
-                    />
-                  </div>
-                  {errors.role && (
-                    <p className="mt-1 text-sm text-red-600">{errors.role}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Bio */}
-              <div>
-                <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-2">
-                  Bio
-                </label>
-                <div className="relative">
-                  <FileText className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                  <textarea
-                    id="bio"
-                    name="bio"
-                    rows={4}
-                    value={formData.bio}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                    className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none text-gray-900 bg-white placeholder-gray-500 text-sm sm:text-base ${
-                      isEditing 
-                        ? (errors.bio ? 'border-red-300' : 'border-gray-300')
-                        : 'border-gray-200 bg-gray-50'
-                    }`}
-                    placeholder="Tell us about yourself..."
-                  />
-                </div>
-                <div className="flex justify-between items-center mt-1">
-                  {errors.bio && (
-                    <p className="text-sm text-red-600">{errors.bio}</p>
-                  )}
-                  <p className="text-sm text-gray-500 ml-auto">
-                    {formData.bio.length}/500 characters
-                  </p>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              {isEditing && (
-                <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 pt-6 border-t border-gray-200">
-                  <button
-                    onClick={handleCancel}
-                    disabled={isSaving}
-                    className="px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleSave}
-                    disabled={isSaving}
-                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
-                  >
-                    {isSaving ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin inline" />
-                        Saving...
-                      </>
-                    ) : (
-                      <>
-                        <Save className="h-4 w-4 mr-2 inline" />
-                        Save Changes
-                      </>
+                {/* Name Fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 form-section">
+                  <div>
+                    <label htmlFor="firstName" className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                      First Name
+                    </label>
+                    <div className="relative">
+                      <UserIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
+                      <input
+                        id="firstName"
+                        name="firstName"
+                        type="text"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                        className={`block w-full pl-12 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm ${
+                          isEditing 
+                            ? (errors.firstName 
+                                ? 'border-red-300 dark:border-red-600 bg-red-50 dark:bg-red-900/20' 
+                                : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-500')
+                            : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                        }`}
+                        placeholder="Enter your first name"
+                      />
+                    </div>
+                    {errors.firstName && (
+                      <p className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center">
+                        <AlertCircle className="h-4 w-4 mr-1" />
+                        {errors.firstName}
+                      </p>
                     )}
-                  </button>
+                  </div>
+
+                  <div>
+                    <label htmlFor="lastName" className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                      Last Name
+                    </label>
+                    <div className="relative">
+                      <UserIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
+                      <input
+                        id="lastName"
+                        name="lastName"
+                        type="text"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                        className={`block w-full pl-12 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm ${
+                          isEditing 
+                            ? (errors.lastName 
+                                ? 'border-red-300 dark:border-red-600 bg-red-50 dark:bg-red-900/20' 
+                                : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-500')
+                            : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                        }`}
+                        placeholder="Enter your last name"
+                      />
+                    </div>
+                    {errors.lastName && (
+                      <p className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center">
+                        <AlertCircle className="h-4 w-4 mr-1" />
+                        {errors.lastName}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              )}
+
+                {/* Professional Fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 form-section">
+                  <div>
+                    <label htmlFor="designation" className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                      Designation
+                    </label>
+                    <div className="relative">
+                      <Briefcase className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
+                      <input
+                        id="designation"
+                        name="designation"
+                        type="text"
+                        value={formData.designation}
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                        className={`block w-full pl-12 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm ${
+                          isEditing 
+                            ? (errors.designation 
+                                ? 'border-red-300 dark:border-red-600 bg-red-50 dark:bg-red-900/20' 
+                                : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-500')
+                            : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                        }`}
+                        placeholder="e.g. Senior Developer"
+                      />
+                    </div>
+                    {errors.designation && (
+                      <p className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center">
+                        <AlertCircle className="h-4 w-4 mr-1" />
+                        {errors.designation}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="role" className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                      Role
+                    </label>
+                    <div className="relative">
+                      <Shield className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
+                      <input
+                        id="role"
+                        name="role"
+                        type="text"
+                        value={formData.role}
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                        className={`block w-full pl-12 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm ${
+                          isEditing 
+                            ? (errors.role 
+                                ? 'border-red-300 dark:border-red-600 bg-red-50 dark:bg-red-900/20' 
+                                : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-500')
+                            : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                        }`}
+                        placeholder="e.g. Frontend Lead"
+                      />
+                    </div>
+                    {errors.role && (
+                      <p className="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center">
+                        <AlertCircle className="h-4 w-4 mr-1" />
+                        {errors.role}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Bio */}
+                <div className="form-section">
+                  <label htmlFor="bio" className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                    Bio
+                  </label>
+                  <div className="relative">
+                    <FileText className="absolute left-4 top-4 h-5 w-5 text-gray-400 dark:text-gray-500" />
+                    <textarea
+                      id="bio"
+                      name="bio"
+                      rows={4}
+                      value={formData.bio}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      className={`block w-full pl-12 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm ${
+                        isEditing 
+                          ? (errors.bio 
+                              ? 'border-red-300 dark:border-red-600 bg-red-50 dark:bg-red-900/20' 
+                              : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-500')
+                          : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                      }`}
+                      placeholder="Tell us about yourself, your expertise, and what you're passionate about..."
+                    />
+                  </div>
+                  <div className="flex justify-between items-center mt-2">
+                    {errors.bio && (
+                      <p className="text-sm text-red-600 dark:text-red-400 flex items-center">
+                        <AlertCircle className="h-4 w-4 mr-1" />
+                        {errors.bio}
+                      </p>
+                    )}
+                                         <p className={`text-sm ml-auto char-counter text-gray-500 dark:text-gray-400 ${
+                       formData.bio.length > 450 ? 'text-yellow-600 dark:text-yellow-400 warning' : formData.bio.length > 480 ? 'text-red-600 dark:text-red-400 danger' : ''
+                     }`}>
+                       {formData.bio.length}/500 characters
+                     </p>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                {isEditing && (
+                  <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+                    <button
+                      onClick={handleCancel}
+                      disabled={isSaving}
+                      className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSave}
+                      disabled={isSaving}
+                      className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium shadow-lg hover:shadow-xl"
+                    >
+                      {isSaving ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin inline" />
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="h-4 w-4 mr-2 inline" />
+                          Save Changes
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

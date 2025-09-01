@@ -78,6 +78,7 @@ public class UserService {
         user.setLastName(request.getLastName());
         user.setCreatedAt(LocalDateTime.now());
         user.setActive(true);
+        user.setGlobalAdmin(true); // ✅ NEW: Set as global admin for new workspace owners
         
         // Save user
         User savedUser = userRepository.save(user);
@@ -113,6 +114,7 @@ public class UserService {
         user.setLastName(request.getLastName());
         user.setCreatedAt(LocalDateTime.now());
         user.setActive(true);
+        user.setGlobalAdmin(false); // ✅ NEW: Invited users are NOT global admins
         
         // Save user
         User savedUser = userRepository.save(user);
@@ -145,6 +147,7 @@ public class UserService {
         response.setEmail(user.getEmail());
         response.setFirstName(user.getFirstName());
         response.setLastName(user.getLastName());
+        response.setGlobalAdmin(user.isGlobalAdmin()); // ✅ NEW: Include global admin flag
         return response;
     }
     

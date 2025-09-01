@@ -3,7 +3,26 @@
 import { MeetingProvider, useMeeting, useParticipant } from "@videosdk.live/react-sdk";
 import ReactPlayer from "react-player";
 import { useEffect, useMemo, useState, useCallback } from "react";
-import { AlertCircle, Loader2, Video, Mic, MicOff, VideoOff } from "lucide-react";
+import { 
+  AlertCircle, 
+  Loader2, 
+  Video, 
+  Mic, 
+  MicOff, 
+  VideoOff,
+  Phone,
+  PhoneOff,
+  Users,
+  Settings,
+  Share2,
+  MessageSquare,
+  MoreHorizontal,
+  Wifi,
+  WifiOff,
+  Clock,
+  Volume2,
+  VolumeX
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 // Check if we're on the client side
@@ -19,41 +38,79 @@ function ParticipantTile({ participantId }: { participantId: string }) {
   }, [webcamOn, webcamStream]);
   
   return (
-    <div className="rounded-xl p-4 shadow-lg border bg-white">
-      <div className="text-sm mb-3 font-medium text-gray-800">
-        {isLocal ? "You" : `Participant ${participantId.slice(0, 8)}`}
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300">
+      {/* Participant Header */}
+      <div className="px-4 py-3 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 border-b border-gray-100 dark:border-gray-600">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className={`w-2 h-2 rounded-full ${isLocal ? 'bg-blue-500 dark:bg-blue-400' : 'bg-green-500 dark:bg-green-400'}`}></div>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              {isLocal ? "You" : `Participant ${participantId.slice(0, 8)}`}
+            </span>
+          </div>
+          <div className="flex items-center space-x-1">
+            {micOn ? (
+              <Mic className="h-3 w-3 text-green-600 dark:text-green-400" />
+            ) : (
+              <MicOff className="h-3 w-3 text-red-600 dark:text-red-400" />
+            )}
+            {webcamOn ? (
+              <Video className="h-3 w-3 text-green-600 dark:text-green-400" />
+            ) : (
+              <VideoOff className="h-3 w-3 text-red-600 dark:text-red-400" />
+            )}
+          </div>
+        </div>
       </div>
-      {mediaStream ? (
-        <div className="relative">
+      
+      {/* Video/Avatar */}
+      <div className="relative">
+        {mediaStream ? (
           <video 
             autoPlay 
             muted={isLocal} 
-            style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+            className="w-full h-48 object-cover"
             ref={(node) => {
               if (node) node.srcObject = mediaStream;
             }}
           />
-          <div className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-1">
-            {micOn ? <Mic className="h-4 w-4 text-white" /> : <MicOff className="h-4 w-4 text-white" />}
+        ) : (
+          <div className="w-full h-48 bg-gradient-to-br from-gray-100 to-blue-100 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span className="text-xl font-bold text-gray-600 dark:text-gray-300">
+                  {isLocal ? "You" : participantId.slice(0, 2).toUpperCase()}
+                </span>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                {isLocal ? "Your camera is off" : "Camera off"}
+              </p>
+            </div>
           </div>
+        )}
+        
+        {/* Status Overlay */}
+        <div className="absolute top-2 right-2 bg-black dark:bg-gray-800 bg-opacity-50 dark:bg-opacity-70 rounded-full p-1">
+          {micOn ? (
+            <Mic className="h-4 w-4 text-white" />
+          ) : (
+            <MicOff className="h-4 w-4 text-white" />
+          )}
         </div>
-      ) : (
-        <div className="h-48 grid place-items-center text-sm opacity-60 bg-gray-100 rounded-lg">
-          <div className="text-center">
-            <VideoOff className="h-8 w-8 mx-auto mb-2 text-gray-400" />
-            <p>{isLocal ? "Your camera is off" : "No video"}</p>
-          </div>
+      </div>
+      
+      {/* Participant Info */}
+      <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700">
+        <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-300">
+          <span className="flex items-center gap-1">
+            {micOn ? <Mic className="h-3 w-3" /> : <MicOff className="h-3 w-3" />}
+            {micOn ? "Mic on" : "Mic off"}
+          </span>
+          <span className="flex items-center gap-1">
+            {webcamOn ? <Video className="h-3 w-3" /> : <VideoOff className="h-3 w-3" />}
+            {webcamOn ? "Camera on" : "Camera off"}
+          </span>
         </div>
-      )}
-      <div className="mt-3 text-xs text-gray-500 flex items-center justify-between">
-        <span className="flex items-center gap-1">
-          {micOn ? <Mic className="h-3 w-3" /> : <MicOff className="h-3 w-3" />}
-          {micOn ? "Mic on" : "Mic off"}
-        </span>
-        <span className="flex items-center gap-1">
-          {webcamOn ? <Video className="h-3 w-3" /> : <VideoOff className="h-3 w-3" />}
-          {webcamOn ? "Cam on" : "Cam off"}
-        </span>
       </div>
     </div>
   );
@@ -75,6 +132,7 @@ function MeetingView() {
   const [error, setError] = useState<string | null>(null);
   const [hasJoined, setHasJoined] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
 
   // Memoize the join function to prevent infinite loops
   const joinMeeting = useCallback(async () => {
@@ -152,20 +210,24 @@ function MeetingView() {
   if (error) {
     return (
       <div className="text-center p-8">
-        <AlertCircle className="h-12 w-12 mx-auto mb-4 text-red-600" />
-        <h3 className="text-xl font-semibold mb-2 text-gray-800">Connection Error</h3>
-        <p className="text-gray-600 mb-6 max-w-md mx-auto">{error}</p>
-        <div className="space-x-4">
+        <div className="w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+          <AlertCircle className="h-10 w-10 text-red-600 dark:text-red-400" />
+        </div>
+        <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">Connection Error</h3>
+        <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx-auto">{error}</p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <button
             onClick={() => window.location.reload()}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center px-6 py-3 bg-blue-600 dark:bg-blue-600 text-white rounded-xl hover:bg-blue-700 dark:hover:bg-blue-700 transition-colors font-medium shadow-lg hover:shadow-xl"
           >
+            <Loader2 className="h-5 w-5 mr-2" />
             Try Again
           </button>
           <button
             onClick={handleLeave}
-            className="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+            className="inline-flex items-center px-6 py-3 bg-red-600 dark:bg-red-600 text-white rounded-xl hover:bg-red-700 dark:hover:bg-red-700 transition-colors font-medium shadow-lg hover:shadow-xl"
           >
+            <PhoneOff className="h-5 w-5 mr-2" />
             Leave Call
           </button>
         </div>
@@ -176,57 +238,91 @@ function MeetingView() {
   if (isConnecting || !hasJoined) {
     return (
       <div className="text-center p-8">
-        <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-blue-600" />
-        <p className="text-gray-600 text-lg">Connecting to call...</p>
-        <p className="text-gray-500 text-sm mt-2">Please wait while we establish your connection</p>
+        <div className="relative mb-6">
+          <div className="w-16 h-16 border-4 border-blue-200 dark:border-blue-800 border-t-blue-600 dark:border-t-blue-400 rounded-full animate-spin mx-auto"></div>
+          <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-blue-400 dark:border-t-blue-300 rounded-full animate-spin mx-auto" style={{ animationDelay: '0.5s' }}></div>
+        </div>
+        <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">Connecting to Call</h3>
+        <p className="text-gray-600 dark:text-gray-300 mb-4">Please wait while we establish your connection</p>
+        <div className="flex items-center justify-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+          <Wifi className="h-4 w-4" />
+          <span>Establishing connection...</span>
+        </div>
       </div>
     );
   }
   
   return (
     <div className="space-y-6">
-      {/* Controls */}
-      <div className="flex gap-4 justify-center">
-        <button 
-          onClick={handleToggleMic} 
-          className={`px-6 py-3 rounded-xl border shadow transition-colors flex items-center gap-2 ${
-            localMicOn 
-              ? 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100' 
-              : 'bg-red-50 border-red-200 text-red-700 hover:bg-red-100'
-          }`}
-        >
-          {localMicOn ? <Mic className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
-          <span>{localMicOn ? "Mic On" : "Mic Off"}</span>
-        </button>
-        <button 
-          onClick={handleToggleWebcam} 
-          className={`px-6 py-3 rounded-xl border shadow transition-colors flex items-center gap-2 ${
-            localWebcamOn 
-              ? 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100' 
-              : 'bg-red-50 border-red-200 text-red-700 hover:bg-red-100'
-          }`}
-        >
-          {localWebcamOn ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
-          <span>{localWebcamOn ? "Camera On" : "Camera Off"}</span>
-        </button>
-        <button 
-          onClick={handleLeave} 
-          className="px-6 py-3 rounded-xl border shadow bg-red-600 text-white hover:bg-red-700 transition-colors flex items-center gap-2"
-        >
-          <span>📞</span>
-          <span>Leave Call</span>
-        </button>
+      {/* Enhanced Controls */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+        <div className="flex flex-wrap gap-4 justify-center">
+          {/* Mic Control */}
+          <button 
+            onClick={handleToggleMic} 
+            className={`px-6 py-4 rounded-xl border-2 shadow-lg transition-all duration-200 flex items-center gap-3 font-medium ${
+              localMicOn 
+                ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-700/50 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50 hover:shadow-xl' 
+                : 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-700/50 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50 hover:shadow-xl'
+            }`}
+          >
+            {localMicOn ? <Mic className="h-6 w-6" /> : <MicOff className="h-6 w-6" />}
+            <span>{localMicOn ? "Mic On" : "Mic Off"}</span>
+          </button>
+          
+          {/* Camera Control */}
+          <button 
+            onClick={handleToggleWebcam} 
+            className={`px-6 py-4 rounded-xl border-2 shadow-lg transition-all duration-200 flex items-center gap-3 font-medium ${
+              localWebcamOn 
+                ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-700/50 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50 hover:shadow-xl' 
+                : 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-700/50 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50 hover:shadow-xl'
+            }`}
+          >
+            {localWebcamOn ? <Video className="h-6 w-6" /> : <VideoOff className="h-6 w-6" />}
+            <span>{localWebcamOn ? "Camera On" : "Camera Off"}</span>
+          </button>
+          
+          {/* Leave Call */}
+          <button 
+            onClick={handleLeave} 
+            className="px-6 py-4 rounded-xl border-2 shadow-lg bg-red-600 dark:bg-red-600 text-white hover:bg-red-700 dark:hover:bg-red-700 transition-all duration-200 flex items-center gap-3 font-medium hover:shadow-xl"
+          >
+            <PhoneOff className="h-6 w-6" />
+            <span>Leave Call</span>
+          </button>
+          
+          {/* Additional Controls */}
+          <button className="px-6 py-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 shadow-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 flex items-center gap-3 font-medium hover:shadow-xl">
+            <Share2 className="h-6 w-6" />
+            <span>Share</span>
+          </button>
+          
+          <button className="px-6 py-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 shadow-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 flex items-center gap-3 font-medium hover:shadow-xl">
+            <MessageSquare className="h-6 w-6" />
+            <span>Chat</span>
+          </button>
+          
+          <button className="px-6 py-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 shadow-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 flex items-center gap-3 font-medium hover:shadow-xl">
+            <Settings className="h-6 w-6" />
+            <span>Settings</span>
+          </button>
+        </div>
       </div>
 
       {/* Participants Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {participants.size === 0 ? (
-          <div className="col-span-full text-center p-12">
-            <div className="text-gray-400 mb-4">
-              <Video className="h-16 w-16 mx-auto" />
+          <div className="col-span-full text-center p-12 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="w-20 h-20 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Users className="h-10 w-10 text-blue-600 dark:text-blue-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">Waiting for others to join</h3>
-            <p className="text-gray-500">You&apos;re the first one here. Share the room link with others!</p>
+            <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">Waiting for others to join</h3>
+            <p className="text-gray-500 dark:text-gray-400 mb-4">You're the first one here. Share the room link with others!</p>
+            <div className="flex items-center justify-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+              <Clock className="h-4 w-4" />
+              <span>Call started recently</span>
+            </div>
           </div>
         ) : (
           [...participants.keys()].map(pid => (
@@ -235,21 +331,29 @@ function MeetingView() {
         )}
       </div>
 
-      {/* Connection Status */}
-      <div className="text-center">
-        <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm ${
-          hasJoined 
-            ? 'bg-green-100 text-green-700' 
-            : 'bg-yellow-100 text-yellow-700'
-        }`}>
-          <div className={`w-2 h-2 rounded-full ${
-            hasJoined ? 'bg-green-500' : 'bg-yellow-500'
-          }`}></div>
-          {hasJoined ? "Connected to call" : "Connecting..."}
+      {/* Enhanced Connection Status */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium ${
+              hasJoined 
+                ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' 
+                : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300'
+            }`}>
+              <div className={`w-2 h-2 rounded-full ${
+                hasJoined ? 'bg-green-500 dark:bg-green-400' : 'bg-yellow-500 dark:bg-yellow-400'
+              }`}></div>
+              {hasJoined ? "Connected to call" : "Connecting..."}
+            </div>
+            <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
+              <Users className="h-4 w-4" />
+              <span>{participants.size + 1} participants</span>
+            </div>
+          </div>
+          <div className="text-xs text-gray-500">
+            Meeting ID: {meetingId}
+          </div>
         </div>
-        <p className="text-xs text-gray-500 mt-2">
-          Meeting ID: {meetingId}
-        </p>
       </div>
     </div>
   );
@@ -268,8 +372,11 @@ export default function CallPanel({ token, meetingId, name }: { token: string; m
   if (!isClient) {
     return (
       <div className="text-center p-8">
-        <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-blue-600" />
-        <p className="text-gray-600 text-lg">Loading video call...</p>
+        <div className="relative mb-6">
+          <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto"></div>
+          <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-blue-400 rounded-full animate-spin mx-auto" style={{ animationDelay: '0.5s' }}></div>
+        </div>
+        <p className="text-gray-600 text-lg font-medium">Loading video call...</p>
       </div>
     );
   }
@@ -278,15 +385,18 @@ export default function CallPanel({ token, meetingId, name }: { token: string; m
   if (!token || !meetingId) {
     return (
       <div className="text-center p-8">
-        <AlertCircle className="h-12 w-12 mx-auto mb-4 text-red-600" />
+        <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <AlertCircle className="h-10 w-10 text-red-600" />
+        </div>
         <h3 className="text-xl font-semibold mb-2 text-gray-800">Invalid Call Configuration</h3>
         <p className="text-gray-600 mb-4">
           Missing required call information. Please try again.
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium shadow-lg hover:shadow-xl"
         >
+          <Loader2 className="h-5 w-5 mr-2" />
           Reload
         </button>
       </div>
@@ -294,16 +404,19 @@ export default function CallPanel({ token, meetingId, name }: { token: string; m
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg border p-6">
+    <div>
       {sdkError ? (
         <div className="text-center p-8">
-          <AlertCircle className="h-12 w-12 mx-auto mb-4 text-red-600" />
+          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <AlertCircle className="h-10 w-10 text-red-600" />
+          </div>
           <h3 className="text-xl font-semibold mb-2 text-gray-800">Video SDK Error</h3>
           <p className="text-gray-600 mb-4">{sdkError}</p>
           <button
             onClick={() => window.location.reload()}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium shadow-lg hover:shadow-xl"
           >
+            <Loader2 className="h-5 w-5 mr-2" />
             Try Again
           </button>
         </div>
