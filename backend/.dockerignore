@@ -1,0 +1,33 @@
+# Maven build artifacts
+target/
+!target/workspace-app-backend-1.0.0.jar
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+
+# Environment files (keeping them for Docker)
+# .env
+
+# Documentation
+README.md
+docs/
