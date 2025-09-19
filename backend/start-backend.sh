@@ -1,7 +1,12 @@
 #!/bin/bash
 
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
 echo "🚀 Starting Workspace App Backend..."
 echo "=================================="
+echo "📂 Working directory: $SCRIPT_DIR"
 
 # Kill any existing processes on port 8080
 echo "🔧 Checking for existing processes on port 8080..."

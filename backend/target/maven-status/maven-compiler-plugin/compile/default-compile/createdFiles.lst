@@ -17,10 +17,10 @@ com/workspace/app/service/WorkspaceInviteService.class
 com/workspace/app/model/WorkspaceInvite.class
 com/workspace/app/controller/GlobalExceptionHandler.class
 com/workspace/app/model/WorkspaceMember.class
-com/workspace/app/service/MessageService.class
-com/workspace/app/service/WorkspaceService.class
-com/workspace/app/security/JwtUtils.class
 com/workspace/app/controller/ChatController.class
+com/workspace/app/service/WorkspaceService.class
+com/workspace/app/service/MessageService.class
+com/workspace/app/security/JwtUtils.class
 com/workspace/app/model/User.class
 com/workspace/app/controller/RoomController.class
 com/workspace/app/dto/VerifyInviteRequest.class
@@ -41,8 +41,8 @@ com/workspace/app/repository/MessageRepository.class
 com/workspace/app/controller/UserController.class
 com/workspace/app/model/Room$VideoMeta.class
 com/workspace/app/dto/MessageRequest.class
-com/workspace/app/service/VideoSdkTokenService.class
 com/workspace/app/repository/WorkspaceInviteRepository.class
+com/workspace/app/service/VideoSdkTokenService.class
 com/workspace/app/controller/AuthController.class
 com/workspace/app/dto/ApiResponse.class
 com/workspace/app/repository/WorkspaceMemberRepository.class

@@ -1,16 +1,19 @@
 # WorkSynk - Collaborative Workspace Platform
 
-A modern, full-stack workspace collaboration platform built with React, Next.js, Spring Boot, and MongoDB.
+A modern, full-stack workspace collaboration platform built with React, Next.js, Spring Boot, and MongoDB. WorkSynk provides seamless real-time communication, video conferencing, and workspace management capabilities for teams and organizations.
 
 ## 🚀 Features
 
 - **Real-time Collaboration**: Chat, video calls, and live workspace updates
-- **User Management**: Authentication, role-based access, and user profiles
+- **User Management**: JWT-based authentication with role-based access control
 - **Workspace Organization**: Create, manage, and organize collaborative rooms
-- **Video Integration**: Built-in video calling with VideoSDK
-- **Dark Mode**: Full dark/light theme support
+- **Video Integration**: Built-in video calling with VideoSDK (up to 10 participants)
+- **Dark Mode**: Full dark/light theme support with system preference detection
 - **Responsive Design**: Mobile-first design with Tailwind CSS
 - **Admin Panel**: Administrative controls and user management
+- **Multi-workspace Support**: Users can belong to multiple workspaces
+- **Invitation System**: Email-based workspace invitations with expiration
+- **WebSocket Integration**: Real-time messaging and live updates
 
 ## 🛠 Tech Stack
 
@@ -57,7 +60,22 @@ workspace-app/
 - Maven 3.6+
 - MongoDB Atlas account
 
-### Frontend Setup
+### Quick Start (Recommended)
+```bash
+# Start Backend
+cd backend
+chmod +x start-backend.sh
+./start-backend.sh
+
+# Start Frontend (in a new terminal)
+cd frontend
+chmod +x start-frontend.sh
+./start-frontend.sh
+```
+
+### Manual Setup
+
+#### Frontend Setup
 ```bash
 cd frontend
 npm install
@@ -65,20 +83,21 @@ npm run dev
 ```
 The frontend will be available at `http://localhost:3000`
 
-### Backend Setup
+#### Backend Setup
 ```bash
 cd backend
 mvn spring-boot:run
 ```
-The backend API will be available at `http://localhost:8080`
+The backend API will be available at `http://localhost:8080/api`
 
 ### Environment Configuration
-Create `.env.local` in the frontend directory:
+The application automatically creates `.env.local` in the frontend directory with the correct API configuration:
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8080
+NEXT_PUBLIC_API_URL=http://localhost:8080/api
+NEXT_PUBLIC_API_BASE=http://localhost:8080/api
 ```
 
-Configure `application.yml` in the backend resources directory with your MongoDB connection details.
+The backend is pre-configured with MongoDB Atlas connection. No additional setup required for development.
 
 ## 🎨 Key Features
 
@@ -110,12 +129,61 @@ Configure `application.yml` in the backend resources directory with your MongoDB
 - TypeScript for type safety
 - Component-based architecture
 - Custom hooks and utilities
+- Comprehensive error handling and validation
 
 ### Styling
 - Tailwind CSS for utility-first styling
 - Custom theme system with dark mode
 - Responsive design patterns
 - Animation and transition utilities
+
+### API Architecture
+- RESTful API design with Spring Boot
+- WebSocket integration for real-time features
+- JWT-based authentication and authorization
+- CORS configuration for cross-origin requests
+- API proxy configuration in Next.js
+
+### Database
+- MongoDB Atlas cloud database
+- 6 main collections: users, rooms, messages, workspaces, workspace_members, workspace_invites
+- Optimized indexing for performance
+- Data validation and integrity checks
+
+## 🧪 Testing
+
+### API Testing
+All major API endpoints have been tested and verified:
+- ✅ Authentication APIs (login, register)
+- ✅ User Management APIs (profile, updates)
+- ✅ Room Management APIs (create, join, leave)
+- ✅ Message APIs (send, retrieve, pagination)
+- ✅ Video Integration APIs (token generation)
+- ✅ System APIs (health check, system info)
+
+### Test Credentials
+The application includes test accounts for development:
+- **Admin User**: `palsamarth9@gmail.com` / `Sama.1234`
+- **Regular User**: `samarthdev.io@gmail.com` / `Arun.1234`
+
+### Application URLs
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8080/api
+- **API Proxy**: http://localhost:3000/api/* → http://localhost:8080/api/*
+
+## 🚀 Deployment
+
+### Docker Support
+The application includes Docker configuration for easy deployment:
+```bash
+docker-compose up --build
+```
+
+### Production Considerations
+- Environment variables for production configuration
+- MongoDB Atlas production cluster
+- SSL/TLS certificate management
+- CDN for static assets
 
 ## 📱 Browser Support
 - Chrome (latest)
@@ -127,7 +195,8 @@ Configure `application.yml` in the backend resources directory with your MongoDB
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Submit a pull request
+4. Test your changes thoroughly
+5. Submit a pull request
 
 ## 📄 License
 This project is licensed under the MIT License.
@@ -137,3 +206,16 @@ This project is licensed under the MIT License.
 - [Spring Boot Documentation](https://spring.io/projects/spring-boot)
 - [MongoDB Documentation](https://docs.mongodb.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [VideoSDK Documentation](https://docs.videosdk.live/)
+
+## 📝 Recent Updates
+
+### v1.0.0 (Latest)
+- ✅ Fixed frontend-backend API connectivity issues
+- ✅ Implemented API proxy configuration in Next.js
+- ✅ Added comprehensive environment configuration
+- ✅ Enhanced error handling and validation
+- ✅ Improved startup scripts for easy development
+- ✅ Added comprehensive API testing and verification
+- ✅ Optimized CORS configuration for cross-origin requests
+- ✅ Enhanced documentation and setup instructions
