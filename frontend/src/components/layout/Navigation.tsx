@@ -4,13 +4,13 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { 
-  Home, 
-  MessageSquare, 
-  Settings, 
-  User, 
-  LogOut, 
-  Plus, 
+import {
+  Home,
+  MessageSquare,
+  Settings,
+  User,
+  LogOut,
+  Plus,
   Video,
   Shield,
   Menu,
@@ -43,6 +43,30 @@ const Navigation = () => {
   useEffect(() => {
     closeMobileMenu();
   }, [pathname]);
+
+  const [directMessages, setDirectMessages] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchDMs = async () => {
+      if (user) {
+        try {
+          // We need to import roomAPI, but since we can't easily add imports with replace_file_content without context,
+          // we'll assume it's available or use a dynamic import if needed. 
+          // Actually, let's just use the roomAPI from @/lib/api if we can import it.
+          // Since I can't add imports easily at the top without reading the whole file, I'll try to add imports in a separate step.
+          // For now, I'll assume I can add the import.
+          const { roomAPI } = await import('@/lib/api');
+          const rooms = await roomAPI.getMyRooms();
+          const dms = rooms.filter((r: any) => r.type === 'DIRECT');
+          setDirectMessages(dms);
+        } catch (error) {
+          console.error('Failed to fetch DMs', error);
+        }
+      }
+    };
+
+    fetchDMs();
+  }, [user]);
 
   const navigationItems = [
     {
@@ -91,9 +115,9 @@ const Navigation = () => {
             </button>
             <Link href="/dashboard" className="flex items-center">
               {!logoError ? (
-                <Image 
-                  src="/logo.png" 
-                  alt="WorkSynk" 
+                <Image
+                  src="/logo.png"
+                  alt="WorkSynk"
                   width={120}
                   height={32}
                   className="h-8 w-auto"
@@ -106,10 +130,10 @@ const Navigation = () => {
               )}
             </Link>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <ThemeToggle />
-            
+
             {/* Mobile User Info (Non-clickable) */}
             <div className="flex items-center space-x-2 p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
               <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
@@ -133,7 +157,7 @@ const Navigation = () => {
 
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50"
           onClick={closeMobileMenu}
         />
@@ -148,9 +172,9 @@ const Navigation = () => {
         <div className="navigation-header flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
           <Link href="/dashboard" className="flex items-center">
             {!logoError ? (
-              <Image 
-                src="/logo.png" 
-                alt="WorkSynk" 
+              <Image
+                src="/logo.png"
+                alt="WorkSynk"
                 width={120}
                 height={32}
                 className="h-8 w-auto"
@@ -175,8 +199,8 @@ const Navigation = () => {
               href={item.href}
               className={`
                 flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
-                ${item.isActive 
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' 
+                ${item.isActive
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                 }
               `}
@@ -186,6 +210,33 @@ const Navigation = () => {
             </Link>
           ))}
         </nav>
+
+        {/* Direct Messages Section */}
+        {directMessages.length > 0 && (
+          <div className="px-4 pb-4">
+            <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 px-2">
+              Direct Messages
+            </h3>
+            <div className="space-y-1">
+              {directMessages.map((dm) => (
+                <Link
+                  key={dm.id}
+                  href={`/dashboard/rooms/${dm.id}`}
+                  className={`
+                    flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                    ${pathname === `/dashboard/rooms/${dm.id}`
+                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    }
+                  `}
+                >
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  <span className="truncate">{dm.name.replace(user?.username || '', '').replace(' & ', '').replace('Direct message between', '').trim() || dm.name}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Mobile User Section */}
         <div className="lg:hidden navigation-footer border-t border-gray-200 dark:border-gray-700 p-4">
@@ -213,24 +264,22 @@ const Navigation = () => {
             <Link
               href="/dashboard/profile"
               onClick={closeMobileMenu}
-              className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                pathname === '/dashboard/profile'
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' 
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`}
+              className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${pathname === '/dashboard/profile'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
             >
               <User className="h-4 w-4" />
               <span>Profile</span>
             </Link>
-            
+
             <Link
               href="/dashboard/settings"
               onClick={closeMobileMenu}
-              className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                pathname === '/dashboard/settings'
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' 
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`}
+              className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${pathname === '/dashboard/settings'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
             >
               <Settings className="h-4 w-4" />
               <span>Settings</span>
@@ -240,11 +289,10 @@ const Navigation = () => {
               <Link
                 href="/dashboard/admin"
                 onClick={closeMobileMenu}
-                className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  pathname === '/dashboard/admin'
-                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' 
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
+                className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${pathname === '/dashboard/admin'
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
               >
                 <Shield className="h-4 w-4" />
                 <span>Admin Settings</span>
@@ -290,23 +338,21 @@ const Navigation = () => {
           <div className="space-y-1">
             <Link
               href="/dashboard/profile"
-              className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                pathname === '/dashboard/profile'
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' 
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`}
+              className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${pathname === '/dashboard/profile'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
             >
               <User className="h-4 w-4" />
               <span>Profile</span>
             </Link>
-            
+
             <Link
               href="/dashboard/settings"
-              className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                pathname === '/dashboard/settings'
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' 
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`}
+              className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${pathname === '/dashboard/settings'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
             >
               <Settings className="h-4 w-4" />
               <span>Settings</span>
@@ -315,11 +361,10 @@ const Navigation = () => {
             {isAdmin && (
               <Link
                 href="/dashboard/admin"
-                className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  pathname === '/dashboard/admin'
-                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' 
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                }`}
+                className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${pathname === '/dashboard/admin'
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
               >
                 <Shield className="h-4 w-4" />
                 <span>Admin Settings</span>
@@ -336,7 +381,7 @@ const Navigation = () => {
             </button>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 };

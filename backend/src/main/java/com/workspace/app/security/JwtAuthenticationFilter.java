@@ -1,5 +1,6 @@
 package com.workspace.app.security;
 
+import com.workspace.app.model.User;
 import com.workspace.app.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,7 +17,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * JWT Authentication Filter
@@ -42,26 +45,48 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String userId = jwtUtils.getUserIdFromJwtToken(jwt);
                 String username = jwtUtils.getUsernameFromJwtToken(jwt);
                 
-                // Create authentication object
-                UsernamePasswordAuthenticationToken authentication = 
-                    new UsernamePasswordAuthenticationToken(
-                        userId, 
-                        null, 
-                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-                    );
+                // Fetch user from database to get roles and verify user still exists
+                Optional<User> userOptional = userService.getUserById(userId);
                 
-                // Set additional details
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                
-                // Set authentication in security context
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                
-                // Add user info to request attributes for easy access
-                request.setAttribute("userId", userId);
-                request.setAttribute("username", username);
+                if (userOptional.isPresent()) {
+                    User user = userOptional.get();
+                    
+                    // Build authorities based on user roles
+                    List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                    authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+                    
+                    // Add admin role if user is global admin
+                    if (user.isGlobalAdmin()) {
+                        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                    }
+                    
+                    // Create authentication object
+                    UsernamePasswordAuthenticationToken authentication = 
+                        new UsernamePasswordAuthenticationToken(
+                            userId, 
+                            null, 
+                            authorities
+                        );
+                    
+                    // Set additional details
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    
+                    // Set authentication in security context
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    
+                    // Add user info to request attributes for easy access in controllers
+                    request.setAttribute("userId", userId);
+                    request.setAttribute("username", username);
+                    request.setAttribute("isAdmin", user.isGlobalAdmin());
+                    
+                    logger.debug("User authenticated successfully: userId=" + userId + 
+                        ", username=" + username + ", admin=" + user.isGlobalAdmin());
+                } else {
+                    logger.warn("User not found for valid JWT token: userId=" + userId);
+                }
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: " + e.getMessage());
+            logger.error("Cannot set user authentication: " + e.getMessage(), e);
         }
         
         filterChain.doFilter(request, response);

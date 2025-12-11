@@ -3,12 +3,13 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, MessageSquare, Send, Loader2, Video, PhoneCall } from 'lucide-react';
+import { ArrowLeft, MessageSquare, Send, Loader2, Video, PhoneCall, X, Users, Paperclip } from 'lucide-react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { roomAPI, messageAPI } from '@/lib/api';
 import { startVideoForRoom } from '@/lib/video';
-import { Message, Room, MessageRequest } from '@/types';
+import { Message, Room, MessageRequest, User, MessageType } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
+import ChatInput from '@/components/chat/ChatInput';
 
 export default function RoomDetailPage() {
   const params = useParams<{ roomId: string }>();
@@ -22,13 +23,36 @@ export default function RoomDetailPage() {
   const [newMessage, setNewMessage] = useState<string>('');
   const [isSending, setIsSending] = useState<boolean>(false);
   const [isStartingCall, setIsStartingCall] = useState<boolean>(false);
+  const [members, setMembers] = useState<User[]>([]);
+  const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+  const loadMembers = async () => {
+    if (!roomId) return;
+    try {
+      const memberDetails = await roomAPI.getRoomMemberDetails(roomId);
+      setMembers(memberDetails);
+      setIsMembersModalOpen(true);
+    } catch (err) {
+      console.error('Failed to load members:', err);
+    }
+  };
+
+  const handleMessageUser = async (targetUserId: string) => {
+    try {
+      const dmRoom = await roomAPI.getOrCreateDirectRoom(targetUserId);
+      setIsMembersModalOpen(false);
+      router.push(`/dashboard/rooms/${dmRoom.id}`);
+    } catch (err) {
+      console.error('Failed to create DM:', err);
+    }
+  };
 
   useEffect(() => {
     const loadRoom = async () => {
       if (!roomId) return;
-      
+
       // Validate room ID format (should be a MongoDB ObjectId)
       if (!/^[0-9a-fA-F]{24}$/.test(roomId)) {
         setError('Invalid room ID format. Redirecting to dashboard...');
@@ -38,7 +62,7 @@ export default function RoomDetailPage() {
         }, 2000);
         return;
       }
-      
+
       try {
         setIsLoading(true);
         setError(undefined); // Clear any previous errors
@@ -47,12 +71,12 @@ export default function RoomDetailPage() {
         await loadMessages();
       } catch (err: unknown) {
         console.error('Failed to load room:', err);
-        
+
         let errorMessage = 'Failed to load room';
-        
+
         if (err instanceof Error) {
           errorMessage = err.message;
-          
+
           // Check for specific error types
           if (errorMessage.includes('404') || errorMessage.includes('Resource not found')) {
             errorMessage = 'Room not found. It may have been deleted or you may not have access.';
@@ -62,7 +86,7 @@ export default function RoomDetailPage() {
             errorMessage = 'Please log in to access this room.';
           }
         }
-        
+
         setError(errorMessage);
       } finally {
         setIsLoading(false);
@@ -97,7 +121,7 @@ export default function RoomDetailPage() {
 
   const handleStartVideoCall = async () => {
     if (!roomId || !user?.id) return;
-    
+
     try {
       setIsStartingCall(true);
       await startVideoForRoom(roomId, user.id);
@@ -112,38 +136,25 @@ export default function RoomDetailPage() {
     }
   };
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newMessage.trim() || !roomId || isSending) return;
-
-    const messageText = newMessage.trim();
-    setNewMessage('');
-    setIsSending(true);
+  const handleSendMessage = async (text: string, attachment?: any) => {
+    if ((!text.trim() && !attachment) || !room || !user) return;
 
     try {
-      const messageRequest: MessageRequest = {
-        roomId,
-        text: messageText,
+      setIsSending(true);
+      const messageData: MessageRequest = {
+        roomId: room.id,
+        text: text,
+        ...attachment
       };
-      
-      const sentMessage = await messageAPI.sendMessage(messageRequest);
-      
-      // Add the new message to the end of the list (chronological order)
-      setMessages(prev => [...prev, sentMessage]);
-    } catch (err: unknown) {
+
+      const newMessage = await messageAPI.sendMessage(messageData);
+      setMessages(prev => [...prev, newMessage]);
+      setNewMessage('');
+    } catch (err) {
       console.error('Failed to send message:', err);
-      // Restore the message text if sending failed
-      setNewMessage(messageText);
-      setError(err instanceof Error ? err.message : 'Failed to send message');
+      setError('Failed to send message');
     } finally {
       setIsSending(false);
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage(e as unknown as React.FormEvent);
     }
   };
 
@@ -206,14 +217,19 @@ export default function RoomDetailPage() {
               )}
               <div className="mt-3 flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 flex-wrap gap-2">
-                  <span>{room.members?.length || 0} members</span>
+                  <button
+                    onClick={loadMembers}
+                    className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors underline decoration-dotted underline-offset-2"
+                  >
+                    {room.members?.length || 0} members
+                  </button>
                   {room.private && (
                     <span className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full text-xs">
                       Private
                     </span>
                   )}
                 </div>
-                
+
                 {/* Video Call Buttons */}
                 <div className="flex items-center gap-2">
                   {room.video?.active && room.video?.videoRoomId ? (
@@ -263,7 +279,7 @@ export default function RoomDetailPage() {
               </div>
 
               {/* Messages List */}
-              <div 
+              <div
                 ref={messagesContainerRef}
                 className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4"
               >
@@ -282,24 +298,41 @@ export default function RoomDetailPage() {
                         className={`flex ${message.senderId === user?.id ? 'justify-end' : 'justify-start'}`}
                       >
                         <div
-                          className={`max-w-[85%] sm:max-w-xs lg:max-w-md px-3 sm:px-4 py-2 sm:py-3 rounded-lg ${
-                            message.senderId === user?.id
-                              ? 'bg-blue-600 dark:bg-blue-600 text-white'
-                              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white'
-                          }`}
+                          className={`max-w-[85%] sm:max-w-xs lg:max-w-md px-3 sm:px-4 py-2 sm:py-3 rounded-lg ${message.senderId === user?.id
+                            ? 'bg-blue-600 dark:bg-blue-600 text-white'
+                            : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white'
+                            }`}
                         >
                           {message.senderId !== user?.id && (
                             <div className="text-xs font-medium mb-1 opacity-75 truncate">
                               {message.senderUsername}
                             </div>
                           )}
+                          {message.type === MessageType.IMAGE && message.attachmentUrl && (
+                            <img
+                              src={message.attachmentUrl}
+                              alt={message.attachmentName || 'Image'}
+                              className="max-w-full rounded-lg mb-2 max-h-64 object-contain cursor-pointer"
+                              onClick={() => window.open(message.attachmentUrl, '_blank')}
+                            />
+                          )}
+                          {message.type === MessageType.FILE && message.attachmentUrl && (
+                            <a
+                              href={message.attachmentUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2 p-2 bg-black/10 dark:bg-white/10 rounded mb-2 hover:bg-black/20 dark:hover:bg-white/20 transition-colors"
+                            >
+                              <Paperclip className="w-4 h-4" />
+                              <span className="text-sm truncate underline">{message.attachmentName || 'File'}</span>
+                            </a>
+                          )}
                           <div className="text-sm sm:text-base break-words">{message.text}</div>
                           <div
-                            className={`text-xs mt-1 ${
-                              message.senderId === user?.id 
-                                ? 'text-blue-100 dark:text-blue-200' 
-                                : 'text-gray-500 dark:text-gray-400'
-                            }`}
+                            className={`text-xs mt-1 ${message.senderId === user?.id
+                              ? 'text-blue-100 dark:text-blue-200'
+                              : 'text-gray-500 dark:text-gray-400'
+                              }`}
                           >
                             {new Date(message.createdAt).toLocaleTimeString()}
                           </div>
@@ -312,36 +345,56 @@ export default function RoomDetailPage() {
               </div>
 
               {/* Message Input */}
-              <div className="border-t border-gray-200 dark:border-gray-700 p-3 sm:p-4">
-                <form onSubmit={handleSendMessage} className="flex items-end space-x-2 sm:space-x-3">
-                  <div className="flex-1">
-                    <textarea
-                      value={newMessage}
-                      onChange={(e) => setNewMessage(e.target.value)}
-                      onKeyPress={handleKeyPress}
-                      placeholder="Type your message..."
-                      rows={1}
-                      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-gray-900 dark:text-white bg-white dark:bg-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-sm sm:text-base"
-                      disabled={isSending}
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={!newMessage.trim() || isSending}
-                    className="px-3 sm:px-4 py-2 sm:py-3 bg-blue-600 dark:bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
-                  >
-                    {isSending ? (
-                      <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
-                    ) : (
-                      <Send className="h-4 w-4 sm:h-5 sm:w-5" />
-                    )}
-                  </button>
-                </form>
-              </div>
+              <ChatInput
+                onSendMessage={handleSendMessage}
+                disabled={isSending}
+              />
             </div>
           </div>
         ) : null}
       </div>
+
+      {/* Members Modal */}
+      {isMembersModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full max-h-[80vh] overflow-hidden flex flex-col shadow-xl">
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+              <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Room Members</h3>
+              <button
+                onClick={() => setIsMembersModalOpen(false)}
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="overflow-y-auto p-4 space-y-3">
+              {members.map(member => (
+                <div key={member.id} className="flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-medium">
+                      {member.firstName?.[0] || member.username[0]}
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm text-gray-900 dark:text-white">
+                        {member.firstName} {member.lastName}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">@{member.username}</p>
+                    </div>
+                  </div>
+                  {member.id !== user?.id && (
+                    <button
+                      onClick={() => handleMessageUser(member.id)}
+                      className="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+                    >
+                      Message
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </DashboardLayout>
   );
 }

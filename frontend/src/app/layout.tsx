@@ -31,8 +31,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} antialiased min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800`}>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${inter.variable} antialiased min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800`}
+        suppressHydrationWarning
+      >
         <ErrorBoundary>
           <ThemeProvider>
             <AuthProvider>

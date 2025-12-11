@@ -10,7 +10,8 @@ spring:
   data:
     mongodb:
       # MongoDB Atlas Cloud Database
-      uri: mongodb+srv://palsamarth9:sama.1234@cluster0.4yyhdbj.mongodb.net/workspace-app?retryWrites=true&w=majority&appName=Cluster0&connectTimeoutMS=30000&socketTimeoutMS=30000&serverSelectionTimeoutMS=30000&maxPoolSize=50&maxIdleTimeMS=120000&maxLifeTimeMS=300000
+      # Set MONGODB_URI environment variable for production
+      uri: ${MONGODB_URI:mongodb+srv://palsamarth9:sama.1234@cluster0.4yyhdbj.mongodb.net/workspace-app?retryWrites=true&w=majority&appName=Cluster0&connectTimeoutMS=30000&socketTimeoutMS=30000&serverSelectionTimeoutMS=30000&maxPoolSize=50&maxIdleTimeMS=120000&maxLifeTimeMS=300000}
       # Local fallback (commented out):
       # uri: mongodb://localhost:27017/workspace-app
   
@@ -21,8 +22,9 @@ spring:
 
 # JWT Configuration
 jwt:
-  secret: WorkspaceAppSecretKeyForJWTToken2023ExtraLongSecureKeyForHS512AlgorithmCompliance2024
-  expiration: 86400000 # 24 hours in milliseconds
+  # Set JWT_SECRET environment variable for production
+  secret: ${JWT_SECRET:WorkspaceAppSecretKeyForJWTToken2023ExtraLongSecureKeyForHS512AlgorithmCompliance2024}
+  expiration: ${JWT_EXPIRATION_MS:86400000} # 24 hours in milliseconds
 
 # CORS Configuration
 cors:
@@ -44,6 +46,7 @@ websocket:
 
 # VideoSDK Configuration
 videosdk:
-  apiKey: 1616b563-d1e0-4b0b-8c7e-57080cb264c4
-  secret: eb5df45a66c37d3e049582c31c83d755282cf32224324af54557561551be906e
-  tokenTtlMinutes: 15
+  # Set VIDEOSDK_API_KEY and VIDEOSDK_SECRET environment variables for production
+  apiKey: ${VIDEOSDK_API_KEY:1616b563-d1e0-4b0b-8c7e-57080cb264c4}
+  secret: ${VIDEOSDK_SECRET:eb5df45a66c37d3e049582c31c83d755282cf32224324af54557561551be906e}
+  tokenTtlMinutes: ${VIDEOSDK_TOKEN_TTL:15}

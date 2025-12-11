@@ -28,8 +28,9 @@ public class UserController {
     /**
      * Get current user profile
      * GET /api/users/me
+     * GET /api/users/profile (alias)
      */
-    @GetMapping("/me")
+    @GetMapping({"/me", "/profile"})
     public ResponseEntity<ApiResponse<User>> getCurrentUser(HttpServletRequest request) {
         try {
             String userId = (String) request.getAttribute("userId");
@@ -65,8 +66,9 @@ public class UserController {
     /**
      * Update current user profile
      * PUT /api/users/me
+     * PUT /api/users/profile (alias)
      */
-    @PutMapping("/me")
+    @PutMapping({"/me", "/profile"})
     public ResponseEntity<ApiResponse<User>> updateCurrentUser(
             @RequestBody User updatedUser, 
             HttpServletRequest request) {
@@ -256,6 +258,57 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 ApiResponse.error("Failed to get user rooms: " + e.getMessage())
+            );
+        }
+    }
+    
+    /**
+     * Update user status
+     * PUT /api/users/status
+     */
+    @PutMapping("/status")
+    public ResponseEntity<ApiResponse<User>> updateUserStatus(
+            @RequestBody Map<String, String> statusData,
+            HttpServletRequest request) {
+        try {
+            String userId = (String) request.getAttribute("userId");
+            
+            if (userId == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("User not authenticated")
+                );
+            }
+            
+            String status = statusData.get("status");
+            
+            if (status == null || status.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body(
+                    ApiResponse.error("Status is required")
+                );
+            }
+            
+            // Validate status value
+            List<String> validStatuses = List.of("online", "offline", "busy", "away", "vacation", "medical_leave");
+            if (!validStatuses.contains(status)) {
+                return ResponseEntity.badRequest().body(
+                    ApiResponse.error("Invalid status. Valid values: " + String.join(", ", validStatuses))
+                );
+            }
+            
+            User user = userService.updateUserStatus(userId, status);
+            // Remove sensitive information
+            user.setPasswordHash(null);
+            
+            return ResponseEntity.ok(
+                ApiResponse.success("Status updated successfully", user)
+            );
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(
+                ApiResponse.error(e.getMessage())
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                ApiResponse.error("Failed to update status: " + e.getMessage())
             );
         }
     }

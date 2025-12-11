@@ -1,13 +1,13 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { 
-  ApiResponse, 
-  AuthResponse, 
-  LoginRequest, 
-  RegisterRequest, 
-  User, 
-  Room, 
-  CreateRoomRequest, 
-  Message, 
+import {
+  ApiResponse,
+  AuthResponse,
+  LoginRequest,
+  RegisterRequest,
+  User,
+  Room,
+  CreateRoomRequest,
+  Message,
   MessageRequest,
   PaginationInfo
 } from '@/types';
@@ -45,19 +45,19 @@ apiClient.interceptors.response.use(
     // Create a more detailed error message
     let errorMessage = 'Network error';
     let errorDetails = {};
-    
+
     if (error.response) {
       // Server responded with error status
       const status = error.response.status;
       const data = error.response.data;
-      
+
       errorDetails = {
         status,
         data,
         url: error.config?.url,
         method: error.config?.method
       };
-      
+
       if (data?.message) {
         errorMessage = data.message;
       } else if (status === 404) {
@@ -90,11 +90,11 @@ apiClient.interceptors.response.use(
         method: error.config?.method || 'No method'
       };
     }
-    
+
     // Log the full error details for debugging
     console.error('API Error Details:', JSON.stringify(errorDetails, null, 2));
     console.error('API Error Message:', errorMessage);
-    
+
     if (error.response?.status === 401) {
       // Clear token on unauthorized
       localStorage.removeItem('token');
@@ -102,16 +102,16 @@ apiClient.interceptors.response.use(
       // Don't redirect immediately, let the component handle it
       errorMessage = 'Authentication required. Please log in.';
     }
-    
+
     // Create a new error with the detailed message
     const enhancedError = new Error(errorMessage);
     enhancedError.name = error.name;
     enhancedError.stack = error.stack;
-    
+
     // Add additional properties for debugging
     (enhancedError as Error & { details?: unknown; originalError?: unknown }).details = errorDetails;
     (enhancedError as Error & { details?: unknown; originalError?: unknown }).originalError = error;
-    
+
     return Promise.reject(enhancedError);
   }
 );
@@ -188,7 +188,7 @@ export const userAPI = {
   },
 
   getUserRooms: async (): Promise<{ joinedRooms: string[], adminRooms: string[] }> => {
-    const response: AxiosResponse<ApiResponse<{ joinedRooms: string[], adminRooms: string[] }>> = 
+    const response: AxiosResponse<ApiResponse<{ joinedRooms: string[], adminRooms: string[] }>> =
       await apiClient.get('/users/me/rooms');
     return response.data.data!;
   },
@@ -278,8 +278,29 @@ export const roomAPI = {
   },
 
   endVideoCall: async (roomId: string): Promise<void> => {
-    await apiClient.post(`/rooms/${roomId}/video/end`);
+    await apiClient.post<ApiResponse<any>>(`/rooms/${roomId}/video/end`);
   },
+
+  getOrCreateDirectRoom: async (targetUserId: string): Promise<Room> => {
+    const response = await apiClient.post<ApiResponse<Room>>(`/rooms/dm/${targetUserId}`);
+    return response.data.data!;
+  },
+
+  getRoomMemberDetails: async (roomId: string): Promise<User[]> => {
+    const response = await apiClient.get<ApiResponse<User[]>>(`/rooms/${roomId}/members/details`);
+    return response.data.data!;
+  },
+
+  uploadFile: async (file: File): Promise<{ fileName: string; fileUrl: string; fileType: string; size: number }> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await apiClient.post<ApiResponse<{ fileName: string; fileUrl: string; fileType: string; size: number }>>('/files/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data.data!;
+  }
 };
 
 // Message API
@@ -289,8 +310,8 @@ export const messageAPI = {
     return response.data.data!;
   },
 
-  getRoomMessages: async (roomId: string, page: number = 0, size: number = 20): Promise<{content: Message[], page: PaginationInfo}> => {
-    const response: AxiosResponse<ApiResponse<{content: Message[], page: PaginationInfo}>> = 
+  getRoomMessages: async (roomId: string, page: number = 0, size: number = 20): Promise<{ content: Message[], page: PaginationInfo }> => {
+    const response: AxiosResponse<ApiResponse<{ content: Message[], page: PaginationInfo }>> =
       await apiClient.get(`/messages/room/${roomId}?page=${page}&size=${size}`);
     return response.data.data!;
   },

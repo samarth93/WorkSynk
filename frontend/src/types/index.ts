@@ -49,6 +49,7 @@ export interface AuthResponse {
 export interface Room {
   id: string;
   name: string;
+  type?: 'GROUP' | 'DIRECT';
   description?: string;
   adminId: string;
   members: string[];
@@ -115,6 +116,11 @@ export interface MessageRequest {
   roomId: string;
   text: string;
   parentMessageId?: string;
+  type?: MessageType;
+  attachmentUrl?: string;
+  attachmentName?: string;
+  attachmentType?: string;
+  attachmentSize?: number;
 }
 
 // API Response types

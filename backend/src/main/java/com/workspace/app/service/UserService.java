@@ -219,6 +219,13 @@ public class UserService {
     }
     
     /**
+     * Get all users (admin only)
+     */
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+    
+    /**
      * Get user by username
      */
     public Optional<User> getUserByUsername(String username) {
@@ -412,5 +419,16 @@ public class UserService {
         
         String userId = jwtUtils.getUserIdFromJwtToken(token);
         return userRepository.findById(userId);
+    }
+    
+    /**
+     * Update user status
+     */
+    public User updateUserStatus(String userId, String status) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        user.setStatus(status);
+        return userRepository.save(user);
     }
 }

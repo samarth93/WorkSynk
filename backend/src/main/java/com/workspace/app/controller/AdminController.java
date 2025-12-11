@@ -6,13 +6,16 @@ import com.workspace.app.dto.InviteResponse;
 import com.workspace.app.model.WorkspaceInvite;
 import com.workspace.app.model.Workspace;
 import com.workspace.app.model.User;
+import com.workspace.app.model.Room;
 import com.workspace.app.service.WorkspaceInviteService;
 import com.workspace.app.service.WorkspaceService;
 import com.workspace.app.service.UserService;
+import com.workspace.app.service.RoomService;
 import com.workspace.app.security.JwtUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -22,6 +25,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * REST Controller for admin-only workspace management operations
@@ -39,6 +44,9 @@ public class AdminController {
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private RoomService roomService;
     
     @Autowired
     private JwtUtils jwtUtils;
@@ -269,5 +277,116 @@ public class AdminController {
         }
         
         return null;
+    }
+    
+    /**
+     * Get all users (admin only)
+     * GET /api/admin/users
+     */
+    @GetMapping("/users")
+    public ResponseEntity<ApiResponse<List<User>>> getAllUsers(HttpServletRequest httpRequest) {
+        try {
+            String userId = (String) httpRequest.getAttribute("userId");
+            Boolean isAdmin = (Boolean) httpRequest.getAttribute("isAdmin");
+            
+            if (userId == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("User not authenticated")
+                );
+            }
+            
+            if (isAdmin == null || !isAdmin) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    ApiResponse.error("Only global admins can access this endpoint")
+                );
+            }
+            
+            List<User> users = userService.getAllUsers();
+            return ResponseEntity.ok(
+                ApiResponse.success("Users retrieved successfully", users)
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                ApiResponse.error("Failed to retrieve users: " + e.getMessage())
+            );
+        }
+    }
+    
+    /**
+     * Get all rooms (admin only)
+     * GET /api/admin/rooms
+     */
+    @GetMapping("/rooms")
+    public ResponseEntity<ApiResponse<List<Room>>> getAllRooms(HttpServletRequest httpRequest) {
+        try {
+            String userId = (String) httpRequest.getAttribute("userId");
+            Boolean isAdmin = (Boolean) httpRequest.getAttribute("isAdmin");
+            
+            if (userId == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("User not authenticated")
+                );
+            }
+            
+            if (isAdmin == null || !isAdmin) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    ApiResponse.error("Only global admins can access this endpoint")
+                );
+            }
+            
+            List<Room> rooms = roomService.getAllActiveRooms();
+            return ResponseEntity.ok(
+                ApiResponse.success("Rooms retrieved successfully", rooms)
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                ApiResponse.error("Failed to retrieve rooms: " + e.getMessage())
+            );
+        }
+    }
+    
+    /**
+     * Get system statistics (admin only)
+     * GET /api/admin/stats
+     */
+    @GetMapping("/stats")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getSystemStats(HttpServletRequest httpRequest) {
+        try {
+            String userId = (String) httpRequest.getAttribute("userId");
+            Boolean isAdmin = (Boolean) httpRequest.getAttribute("isAdmin");
+            
+            if (userId == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    ApiResponse.error("User not authenticated")
+                );
+            }
+            
+            if (isAdmin == null || !isAdmin) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    ApiResponse.error("Only global admins can access this endpoint")
+                );
+            }
+            
+            Map<String, Object> stats = new HashMap<>();
+            
+            List<User> allUsers = userService.getAllUsers();
+            List<Room> allRooms = roomService.getAllActiveRooms();
+            
+            stats.put("totalUsers", allUsers.size());
+            stats.put("totalRooms", allRooms.size());
+            stats.put("activeUsers", allUsers.stream()
+                .filter(u -> "online".equals(u.getStatus()) || "busy".equals(u.getStatus()))
+                .count());
+            stats.put("publicRooms", allRooms.stream().filter(r -> !r.isPrivate()).count());
+            stats.put("privateRooms", allRooms.stream().filter(Room::isPrivate).count());
+            
+            return ResponseEntity.ok(
+                ApiResponse.success("Statistics retrieved successfully", stats)
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                ApiResponse.error("Failed to retrieve statistics: " + e.getMessage())
+            );
+        }
     }
 }

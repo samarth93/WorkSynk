@@ -15,14 +15,22 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('system');
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
+  const [mounted, setMounted] = useState(false);
+
+  // Mark as mounted on client
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Initialize theme from localStorage or default to system
   useEffect(() => {
+    if (!mounted) return;
+
     const savedTheme = localStorage.getItem('theme') as Theme;
     if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
       setThemeState(savedTheme);
     }
-  }, []);
+  }, [mounted]);
 
   // Update resolved theme based on current theme and system preference
   useEffect(() => {
@@ -41,7 +49,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (theme === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       const handleChange = () => updateResolvedTheme();
-      
+
       mediaQuery.addEventListener('change', handleChange);
       return () => mediaQuery.removeEventListener('change', handleChange);
     }
@@ -50,14 +58,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Apply theme to document
   useEffect(() => {
     const root = document.documentElement;
-    
+
     // Remove any existing theme classes first
     root.classList.remove('dark');
-    
+
     if (resolvedTheme === 'dark') {
       root.classList.add('dark');
     }
-    
+
     // Also update the body class for immediate visual feedback
     document.body.classList.remove('dark');
     if (resolvedTheme === 'dark') {

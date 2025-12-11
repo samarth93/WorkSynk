@@ -1,0 +1,89 @@
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m----------------< [0;36mcom.workspace:workspace-app-backend[0;1m >-----------------[m
+[[1;34mINFO[m] [1mBuilding Workspace App Backend 1.0.0[m
+[[1;34mINFO[m]   from pom.xml
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m>>> [0;32mspring-boot:3.1.0:run[m [1m(default-cli)[0;1m > [0;1mtest-compile[m @ [36mworkspace-app-backend[0;1m >>>[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mresources:3.3.1:resources[m [1m(default-resources)[m @ [36mworkspace-app-backend[0;1m ---[m
+[[1;34mINFO[m] Copying 1 resource from src/main/resources to target/classes
+[[1;34mINFO[m] Copying 0 resource from src/main/resources to target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mcompiler:3.11.0:compile[m [1m(default-compile)[m @ [36mworkspace-app-backend[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mresources:3.3.1:testResources[m [1m(default-testResources)[m @ [36mworkspace-app-backend[0;1m ---[m
+[[1;34mINFO[m] skip non existing resourceDirectory /home/samarth/Desktop/Projects /WorkSynk/backend/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mcompiler:3.11.0:testCompile[m [1m(default-testCompile)[m @ [36mworkspace-app-backend[0;1m ---[m
+[[1;34mINFO[m] No sources to compile
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m<<< [0;32mspring-boot:3.1.0:run[m [1m(default-cli)[0;1m < [0;1mtest-compile[m @ [36mworkspace-app-backend[0;1m <<<[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mspring-boot:3.1.0:run[m [1m(default-cli)[m @ [36mworkspace-app-backend[0;1m ---[m
+[[1;34mINFO[m] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.1.0)
+
+2025-11-13T20:28:37.741+05:30  INFO 46429 --- [  restartedMain] c.workspace.app.WorkspaceAppApplication  : Starting WorkspaceAppApplication using Java 21.0.4 with PID 46429 (/home/samarth/Desktop/Projects /WorkSynk/backend/target/classes started by samarth in /home/samarth/Desktop/Projects /WorkSynk/backend)
+2025-11-13T20:28:37.746+05:30 DEBUG 46429 --- [  restartedMain] c.workspace.app.WorkspaceAppApplication  : Running with Spring Boot v3.1.0, Spring v6.0.9
+2025-11-13T20:28:37.748+05:30  INFO 46429 --- [  restartedMain] c.workspace.app.WorkspaceAppApplication  : No active profile set, falling back to 1 default profile: "default"
+2025-11-13T20:28:37.907+05:30  INFO 46429 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-11-13T20:28:37.908+05:30  INFO 46429 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-11-13T20:28:38.514+05:30  INFO 46429 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-11-13T20:28:38.655+05:30  INFO 46429 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 136 ms. Found 6 MongoDB repository interfaces.
+2025-11-13T20:28:39.073+05:30  INFO 46429 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-11-13T20:28:39.080+05:30  INFO 46429 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-13T20:28:39.081+05:30  INFO 46429 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.8]
+2025-11-13T20:28:39.114+05:30  INFO 46429 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2025-11-13T20:28:39.115+05:30  INFO 46429 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1205 ms
+2025-11-13T20:28:39.160+05:30 DEBUG 46429 --- [  restartedMain] c.w.a.security.JwtAuthenticationFilter   : Filter 'jwtAuthenticationFilter' configured for use
+2025-11-13T20:28:39.281+05:30  INFO 46429 --- [dbj.mongodb.net] org.mongodb.driver.cluster               : Adding discovered server ac-yttvsoq-shard-00-02.4yyhdbj.mongodb.net:27017 to client view of cluster
+2025-11-13T20:28:39.300+05:30  INFO 46429 --- [  restartedMain] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "4.9.1"}, "os": {"type": "Linux", "name": "Linux", "architecture": "amd64", "version": "6.17.0-6-generic"}, "platform": "Java/Oracle Corporation/21.0.4+8-LTS-274", "application": {"name": "Cluster0"}} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=majority, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=MongoCredential{mechanism=null, userName='palsamarth9', source='admin', password=<hidden>, mechanismProperties=<hidden>}, streamFactoryFactory=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@3cc04af6, com.mongodb.Jep395RecordCodecProvider@59995b91]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[127.0.0.1:27017], srvHost=cluster0.4yyhdbj.mongodb.net, srvServiceName=mongodb, mode=MULTIPLE, requiredClusterType=REPLICA_SET, requiredReplicaSetName='atlas-ujfils-shard-0', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='30000 ms'}, socketSettings=SocketSettings{connectTimeoutMS=30000, readTimeoutMS=30000, receiveBufferSize=0, sendBufferSize=0}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=30000, readTimeoutMS=30000, receiveBufferSize=0, sendBufferSize=0}, connectionPoolSettings=ConnectionPoolSettings{maxSize=50, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=300000, maxConnectionIdleTimeMS=120000, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=true, invalidHostNameAllowed=false, context=null}, applicationName='Cluster0', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, contextProvider=null}
+2025-11-13T20:28:39.306+05:30  INFO 46429 --- [dbj.mongodb.net] org.mongodb.driver.cluster               : Adding discovered server ac-yttvsoq-shard-00-00.4yyhdbj.mongodb.net:27017 to client view of cluster
+2025-11-13T20:28:39.307+05:30  INFO 46429 --- [dbj.mongodb.net] org.mongodb.driver.cluster               : Adding discovered server ac-yttvsoq-shard-00-01.4yyhdbj.mongodb.net:27017 to client view of cluster
+2025-11-13T20:28:39.487+05:30  WARN 46429 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : Unable to start LiveReload server
+2025-11-13T20:28:39.772+05:30  INFO 46429 --- [ngodb.net:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=ac-yttvsoq-shard-00-02.4yyhdbj.mongodb.net:27017, type=REPLICA_SET_PRIMARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=235175371, setName='atlas-ujfils-shard-0', canonicalAddress=ac-yttvsoq-shard-00-02.4yyhdbj.mongodb.net:27017, hosts=[ac-yttvsoq-shard-00-02.4yyhdbj.mongodb.net:27017, ac-yttvsoq-shard-00-00.4yyhdbj.mongodb.net:27017, ac-yttvsoq-shard-00-01.4yyhdbj.mongodb.net:27017], passives=[], arbiters=[], primary='ac-yttvsoq-shard-00-02.4yyhdbj.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az2'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=7fffffff0000000000000154, setVersion=379, topologyVersion=TopologyVersion{processId=6914ed0d27a87eb9f19fbb53, counter=6}, lastWriteDate=Thu Nov 13 20:28:39 IST 2025, lastUpdateTimeNanos=4305828986151}
+2025-11-13T20:28:39.774+05:30  INFO 46429 --- [ngodb.net:27017] org.mongodb.driver.cluster               : Discovered replica set primary ac-yttvsoq-shard-00-02.4yyhdbj.mongodb.net:27017 with max election id 7fffffff0000000000000154 and max set version 379
+2025-11-13T20:28:39.865+05:30  WARN 46429 --- [  restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 43c250cc-9fdc-4824-b14e-89a1831dc26f
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-11-13T20:28:39.904+05:30  INFO 46429 --- [ngodb.net:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=ac-yttvsoq-shard-00-01.4yyhdbj.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=140223344, setName='atlas-ujfils-shard-0', canonicalAddress=ac-yttvsoq-shard-00-01.4yyhdbj.mongodb.net:27017, hosts=[ac-yttvsoq-shard-00-02.4yyhdbj.mongodb.net:27017, ac-yttvsoq-shard-00-00.4yyhdbj.mongodb.net:27017, ac-yttvsoq-shard-00-01.4yyhdbj.mongodb.net:27017], passives=[], arbiters=[], primary='ac-yttvsoq-shard-00-02.4yyhdbj.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az3'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=379, topologyVersion=TopologyVersion{processId=6914eff9baec26833bb88104, counter=3}, lastWriteDate=Thu Nov 13 20:28:39 IST 2025, lastUpdateTimeNanos=4305961453233}
+2025-11-13T20:28:40.021+05:30  INFO 46429 --- [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@12530cef, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7423a006, org.springframework.security.web.context.SecurityContextHolderFilter@21a870c5, org.springframework.security.web.header.HeaderWriterFilter@1c98c1f, org.springframework.web.filter.CorsFilter@19b7ef6e, org.springframework.security.web.authentication.logout.LogoutFilter@3308cc70, com.workspace.app.security.JwtAuthenticationFilter@7d41741d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2be4136b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@70446144, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4ea3bb94, org.springframework.security.web.session.SessionManagementFilter@1d9baa22, org.springframework.security.web.access.ExceptionTranslationFilter@68049656, org.springframework.security.web.access.intercept.AuthorizationFilter@5196f00b]
+2025-11-13T20:28:40.167+05:30  WARN 46429 --- [  restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-11-13T20:28:40.267+05:30  INFO 46429 --- [  restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-11-13T20:28:40.297+05:30  INFO 46429 --- [  restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-11-13T20:28:40.352+05:30 ERROR 46429 --- [  restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  4.816 s
+[[1;34mINFO[m] Finished at: 2025-11-13T20:28:40+05:30
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
